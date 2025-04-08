@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   background-color: #141414;
   color: white;
@@ -21,8 +17,17 @@ body {
   width: 100%;
 }
 
-/* Combine shared styles for movie cards */
-.movie-card, .numbered-movie-card {
+.movie-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  aspect-ratio: 2/3;
+  width: 100%;
+  transform-origin: center center;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.numbered-movie-card {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   aspect-ratio: 2/3;
@@ -43,48 +48,53 @@ body {
   transform: scale(1.1);
 }
 
-/* Hover effect for movie cards */
-.movie-card:hover, .numbered-movie-card:hover {
+.movie-card:hover {
+  z-index: 50;
+  box-shadow: rgba(0, 0, 0, 0.75) 0px 3px 10px;
+}
+
+.numbered-movie-card:hover {
   z-index: 50;
   box-shadow: rgba(0, 0, 0, 0.75) 0px 3px 10px;
 }
 
 @media (min-width: 768px) {
-  .movie-card:hover, .numbered-movie-card:hover {
+  .movie-card:hover {
+    transform: none;
+  }
+  
+  .numbered-movie-card:hover {
     transform: none;
   }
 }
 
-/* Movie card container */
 .movie-card-container {
   padding: 0.2%;
   transition: transform 0.3s ease;
 }
 
-/* Category row container styles */
 .category-row-container {
   margin-bottom: 3vw;
   position: relative;
-}
-
-.category-row-container:last-child {
-  margin-bottom: 4vw;
 }
 
 .category-row-container:hover {
   z-index: 20;
 }
 
-/* Background gradients */
+.category-row-container:last-child {
+  margin-bottom: 4vw;
+}
+
 .netflix-gradient {
-  background: linear-gradient(77deg, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0) 85%);
+  background: linear-gradient(77deg,rgba(0,0,0,.6) 0,rgba(0,0,0,0) 85%);
 }
 
 .hero-gradient {
   background-image: linear-gradient(
     180deg,
     transparent,
-    rgba(20, 20, 20, 0.9) 70%,
+    rgba(20,20,20,0.9) 70%,
     #141414 100%
   );
   pointer-events: none;
@@ -92,4 +102,8 @@ body {
 
 .modal-gradient {
   background: linear-gradient(to top, #141414 10%, transparent 90%);
+}
+
+html {
+  scroll-behavior: smooth;
 }
