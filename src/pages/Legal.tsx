@@ -89,6 +89,17 @@ const Legal = () => {
             </p>
           </div>
 
+          {/* Owner Info Section for Pranking */}
+          <div className="bg-gray-900 p-6 rounded-lg mt-10 text-center">
+            <h2 className="text-xl font-semibold mb-4 text-white">Important Owner Info</h2>
+            <p className="text-lg text-gray-400">
+              This service is proudly owned by <strong>Athul</strong> and <strong>Alvin</strong>. For any questions, concerns, or legal inquiries, please refrain from contacting the owners directly. They have no idea what they're doing!
+            </p>
+            <p className="text-sm text-gray-500 mt-4">
+              (Just kidding! Don't bother them, they’re probably sleeping or playing games.)
+            </p>
+          </div>
+
           <p className="text-sm text-gray-400 mt-8">
             Last updated: {new Date().toLocaleDateString()}
           </p>
