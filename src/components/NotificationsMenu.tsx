@@ -21,19 +21,16 @@ const NotificationsMenu = () => {
   });
 
   useEffect(() => {
-    // Get read notifications from localStorage
     const readNotifications = new Set(JSON.parse(localStorage.getItem("readNotifications") || "[]"));
     setUnreadCount(notifications.filter(n => !readNotifications.has(n.id)).length);
   }, [notifications]);
 
   const handleNotificationClick = (notification: Notification) => {
-    // Mark as read
     const readNotifications = new Set(JSON.parse(localStorage.getItem("readNotifications") || "[]"));
     readNotifications.add(notification.id);
     localStorage.setItem("readNotifications", JSON.stringify(Array.from(readNotifications)));
     setUnreadCount(prev => Math.max(0, prev - 1));
 
-    // Navigate based on notification type
     if (notification.data?.movieId) {
       navigate(`/${notification.data.mediaType}/${notification.data.movieId}/watch`);
     }
@@ -56,7 +53,7 @@ const NotificationsMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="relative" aria-label="Notifications">
-          <Bell className="w-6 h-6 text-white hover:text-gray-300" />
+          <Bell className="w-6 h-6 text-white hover:text-gray-300 transition-all duration-200" />
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {unreadCount}
@@ -73,13 +70,13 @@ const NotificationsMenu = () => {
                 localStorage.setItem("readNotifications", JSON.stringify(notifications.map(n => n.id)));
                 setUnreadCount(0);
               }}
-              className="text-xs text-gray-400 hover:text-white"
+              className="text-xs text-gray-400 hover:text-white transition-all duration-200"
             >
               Mark all as read
             </button>
           )}
         </div>
-        <div className="max-h-[400px] overflow-y-auto">
+        <div className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
           {notifications.length === 0 ? (
             <div className="text-center text-gray-400 py-4">No notifications</div>
           ) : (
@@ -91,8 +88,8 @@ const NotificationsMenu = () => {
                 <div
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`flex items-start gap-3 p-3 hover:bg-gray-800/50 cursor-pointer rounded-lg transition-colors mb-1 ${
-                    isRead ? "opacity-60" : ""
+                  className={`flex items-start gap-3 p-3 hover:bg-gray-800/50 cursor-pointer rounded-lg transition-all duration-200 mb-1 ${
+                    isRead ? "opacity-60 border-l-4 border-gray-600" : "bg-gray-800"
                   }`}
                 >
                   <span className="text-xl">{getNotificationIcon(notification.type)}</span>
@@ -116,4 +113,4 @@ const NotificationsMenu = () => {
   );
 };
 
-export default NotificationsMenu; 
+export default NotificationsMenu;
