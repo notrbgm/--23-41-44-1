@@ -50,11 +50,15 @@ const NumberedMovieCard = ({
           <span
             className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-all duration-300 ease-in-out"
             style={{
-              color: "rgba(0, 0, 0, 0.6)", // Light black color
-              border: "2px solid red",
+              color: "#333", // Light black color
+              border: "2px solid red", // Red border
               padding: "10px",
               borderRadius: "50%",
-              transform: "scale(1)",
+              width: "80px",
+              height: "80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             {index + 1}
