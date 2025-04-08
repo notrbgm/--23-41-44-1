@@ -1,50 +1,21 @@
+import { useLocation } from "react-router-dom";
 import { Search, User } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { searchContent } from "@/lib/tmdb";
-import { toast } from "sonner";
-import MovieDetailsModal from "./MovieDetailsModal";
-import NotificationsMenu from "./NotificationsMenu";
-import CategoriesMenu from "./CategoriesMenu";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import MobileMenu from "./MobileMenu";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import CategoriesMenu from "./CategoriesMenu";
+import DropdownMenu from "./DropdownMenu"; // Assuming DropdownMenu is another component
+import { toast } from "react-toastify"; // If you're using toast for notifications
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState<any>(null);
 
-  const { data: searchResults } = useQuery({
-    queryKey: ["search", searchQuery],
-    queryFn: () => searchContent(searchQuery),
-    enabled: searchQuery.length > 2,
-  });
-
-  // Add click outside handler to close search
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.search-container')) {
-        setIsSearchOpen(false);
-        setSearchQuery("");
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleNavigation = (path: string) => {
-    setSearchQuery("");
-    setIsSearchOpen(false);
-    navigate(path);
+  const getNavLinkClass = (path: string) => {
+    return location.pathname === path
+      ? "text-red-600 font-semibold"
+      : "text-white hover:text-gray-300";
   };
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,10 +23,8 @@ const Navbar = () => {
   };
 
   const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (searchQuery.length >= 2) {
-        handleNavigation(`/search?q=${encodeURIComponent(searchQuery)}`);
-      }
+    if (e.key === 'Enter' && searchQuery.length >= 2) {
+      handleNavigation(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
     if (e.key === 'Escape') {
       setIsSearchOpen(false);
@@ -74,14 +43,9 @@ const Navbar = () => {
     }
   };
 
-  const handleMovieSelect = (movie: any) => {
-    setSelectedMovie(movie);
-    setSearchQuery("");
-    setIsSearchOpen(false);
-  };
-
-  const showMyList = () => {
-    navigate("/my-list");
+  const handleNavigation = (path: string) => {
+    // Navigate to the given path
+    window.location.href = path;
   };
 
   return (
@@ -93,13 +57,22 @@ const Navbar = () => {
           </Link>
           <MobileMenu />
           <div className="hidden md:flex items-center gap-6">
-            <button onClick={() => handleNavigation("/")} className="text-white hover:text-gray-300">
+            <button
+              onClick={() => handleNavigation("/")}
+              className={getNavLinkClass("/")}
+            >
               Home
             </button>
-            <button onClick={() => handleNavigation("/category/tv")} className="text-white hover:text-gray-300">
+            <button
+              onClick={() => handleNavigation("/category/tv")}
+              className={getNavLinkClass("/category/tv")}
+            >
               TV Shows
             </button>
-            <button onClick={() => handleNavigation("/category/movie")} className="text-white hover:text-gray-300">
+            <button
+              onClick={() => handleNavigation("/category/movie")}
+              className={getNavLinkClass("/category/movie")}
+            >
               Movies
             </button>
             <CategoriesMenu />
@@ -126,57 +99,28 @@ const Navbar = () => {
               >
                 <Search className="w-5 h-5 md:w-6 md:h-6 text-white hover:text-gray-300" />
               </button>
+              {searchQuery && isSearchOpen && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 text-white hover:text-gray-300"
+                  title="Clear search"
+                >
+                  ✖️
+                </button>
+              )}
             </div>
-            {isSearchOpen && searchResults && searchResults.length > 0 && searchQuery.length > 2 && (
-              <div className="absolute top-full right-0 mt-2 w-screen sm:w-full max-w-[90vw] sm:max-w-none bg-black/95 rounded-lg shadow-lg z-[100] max-h-[60vh] overflow-y-auto border border-gray-800">
-                <div className="p-3 border-b border-gray-800">
-                  <button
-                    onClick={() => handleNavigation(`/search?q=${encodeURIComponent(searchQuery)}`)}
-                    className="w-full text-left text-sm text-blue-400 hover:text-blue-300"
-                  >
-                    See all results for "{searchQuery}"
-                  </button>
-                </div>
-                {searchResults.slice(0, 5).map((result: any) => (
-                  <div
-                    key={result.id}
-                    className="flex items-center gap-3 p-3 hover:bg-gray-800/50 cursor-pointer transition-colors border-b border-gray-800 last:border-none"
-                    onClick={() => handleMovieSelect(result)}
-                  >
-                    {result.poster_path ? (
-                      <img
-                        src={`https://image.tmdb.org/t/p/w92${result.poster_path}`}
-                        alt={result.title || result.name}
-                        className="w-12 h-16 object-cover rounded"
-                      />
-                    ) : (
-                      <div className="w-12 h-16 bg-gray-800 rounded flex items-center justify-center text-gray-500">
-                        No Image
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium truncate">{result.title || result.name}</p>
-                      <p className="text-gray-400 text-sm truncate">
-                        {result.media_type === 'movie' ? 'Movie' : 'TV Show'}
-                        {result.media_type === 'tv' && result.number_of_episodes && (
-                          <span className="ml-2">({result.number_of_episodes} episodes)</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
-          <NotificationsMenu />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="focus:outline-none" title="User menu">
+              <button
+                className="focus:outline-none transform transition-all duration-200 hover:scale-105" // Added scaling effect on hover
+                title="User menu"
+              >
                 <User className="w-6 h-6 text-white hover:text-gray-300" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 bg-black/90 text-white border-gray-700">
-              <DropdownMenuItem onClick={showMyList} className="cursor-pointer hover:bg-gray-800">
+              <DropdownMenuItem onClick={() => toast.info("My List coming soon!")} className="cursor-pointer hover:bg-gray-800">
                 My List
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => toast.info("Account settings coming soon!")} className="cursor-pointer hover:bg-gray-800">
@@ -189,13 +133,6 @@ const Navbar = () => {
           </DropdownMenu>
         </div>
       </div>
-      {selectedMovie && (
-        <MovieDetailsModal
-          movie={selectedMovie}
-          isOpen={!!selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-        />
-      )}
     </nav>
   );
 };
