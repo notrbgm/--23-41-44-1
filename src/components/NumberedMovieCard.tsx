@@ -35,12 +35,12 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
   return (
     <>
       <div className="relative w-full h-full">
-        {/* Background Number */}
+        {/* Background Number with Hover Animation */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
           <span 
-            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none"
+            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-transform transform hover:scale-110"
             style={{
-              color: '#000000',
+              color: '#E50914', // Netflix red color
               WebkitTextStroke: '1px #666666',
               fontFamily: 'Netflix Sans, Arial Black, sans-serif',
               letterSpacing: '-4px',
