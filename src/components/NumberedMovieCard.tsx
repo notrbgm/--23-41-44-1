@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Star } from "lucide-react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
+import './NumberedMovieCard.css';  // Path to your CSS file
+
 
 const NumberedMovieCard = ({
   id,
