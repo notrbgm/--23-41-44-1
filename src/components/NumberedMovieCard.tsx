@@ -16,49 +16,54 @@ interface NumberedMovieCardProps {
   recently_added?: boolean;
 }
 
-const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index, release_date, vote_average, recently_added, ...rest }: NumberedMovieCardProps) => {
+const NumberedMovieCard = ({
+  id,
+  title,
+  poster_path,
+  media_type = "movie",
+  index,
+  release_date,
+  vote_average,
+  recently_added,
+  ...rest
+}: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
-  
+
   // Use smaller image size for thumbnails
-  const imageUrl = poster_path 
+  const imageUrl = poster_path
     ? `https://image.tmdb.org/t/p/w342${poster_path}` // w342 is more appropriate for thumbnails than w500
     : "/placeholder.svg";
-  
+
   const handleCardClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowModal(true);
   };
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
-  const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
-  
+  const rating = vote_average ? Number(vote_average.toFixed(1)) : null;
+
   return (
     <>
-      <div className="relative w-full h-full group"> {/* Add group here */}
-        {/* Background Number with Border and Hover Animation */}
+      <div className="relative w-full h-full">
+        {/* Background Number */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
-          <span 
-            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-transform transform group-hover:scale-110"
+          <span
+            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-all duration-300 ease-in-out"
             style={{
-              color: '#2F2F2F', // Light black color
-              border: '3px solid #E50914', // Red border
-              WebkitTextStroke: '1px #666666',
-              fontFamily: 'Netflix Sans, Arial Black, sans-serif',
-              letterSpacing: '-4px',
-              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)',
-              padding: '10px', // Add padding to make the border visible
+              color: "rgba(0, 0, 0, 0.6)", // Light black color
+              border: "2px solid red",
+              padding: "10px",
+              borderRadius: "50%",
+              transform: "scale(1)",
             }}
           >
             {index + 1}
           </span>
         </div>
-        
+
         {/* Movie Poster Container - overlapping the number */}
         <div className="relative w-[45%] ml-auto z-10">
-          <div 
-            onClick={handleCardClick}
-            className="numbered-movie-card cursor-pointer group"
-          >
+          <div onClick={handleCardClick} className="numbered-movie-card cursor-pointer group">
             <Image
               src={imageUrl}
               alt={title}
@@ -96,6 +101,6 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
       />
     </>
   );
-}
+};
 
 export default NumberedMovieCard;
