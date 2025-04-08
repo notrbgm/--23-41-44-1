@@ -33,7 +33,7 @@ const NumberedMovieCard = ({
   // Use smaller image size for thumbnails
   const imageUrl =
     poster_path
-      ? `https://image.tmdb.org/t/p/w342${poster_path}` // w342 is more appropriate for thumbnails than w500
+      ? `https://image.tmdb.org/t/p/w342${poster_path}`
       : "/placeholder.svg";
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -42,7 +42,7 @@ const NumberedMovieCard = ({
   };
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
-  const rating = vote_average ? Number(vote_average.toFixed(1)) : null;
+  const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
 
   return (
     <>
@@ -51,40 +51,21 @@ const NumberedMovieCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Movie Card Container */}
+        {/* Movie Poster Container */}
         <div
-          onClick={handleCardClick}
-          className="flex items-center cursor-pointer group w-full h-full transition-all duration-300"
-          style={{
-            transform: isHovered ? "scale(1.02)" : "scale(1)", // Subtle pop-out effect
-          }}
+          className={`relative w-[45%] ml-auto z-10 transform transition-all duration-300 ${
+            isHovered ? "scale-105" : ""
+          }`}
         >
-          {/* Number */}
           <div
-            className={`absolute bottom-0 left-0 w-[15%] h-[20%] flex items-center justify-center transition-all duration-300 ${
-              isHovered
-                ? "text-red-600 scale-150" // On hover: red color and larger
-                : "text-gray-400 scale-100 border-4 border-red-600 bg-transparent" // When not hovered: red border with no background
-            }`}
-            style={{
-              fontFamily: "Netflix Sans, Arial Black, sans-serif",
-              fontSize: "100px",
-              fontWeight: "bold",
-              letterSpacing: "-4px",
-              borderRadius: "8px",
-              marginBottom: "10px", // Add some space below the number
-            }}
+            onClick={handleCardClick}
+            className="numbered-movie-card cursor-pointer group relative"
           >
-            {index + 1}
-          </div>
-
-          {/* Movie Poster */}
-          <div className="relative w-[85%] h-full">
             <Image
               src={imageUrl}
               alt={title}
               className="w-full h-full rounded-sm object-cover"
-              priority={index < 3} // Eagerly load first 3 items
+              priority={index < 3}
             />
             {/* Recently Added Badge */}
             {recently_added && (
@@ -96,7 +77,9 @@ const NumberedMovieCard = ({
             )}
             {/* Info Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
+              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">
+                {title}
+              </span>
               <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
@@ -109,7 +92,26 @@ const NumberedMovieCard = ({
             </div>
           </div>
         </div>
+
+        {/* Background Number (positioned outside the card) */}
+        <div
+          className={`absolute bottom-0 left-0 z-20 flex items-center justify-start pl-4 ${
+            isHovered ? "scale-125 text-red-600" : "text-gray-400 border-2 border-red-600"
+          }`}
+          style={{
+            fontSize: "150px",
+            fontWeight: "bold",
+            fontFamily: "Netflix Sans, Arial Black, sans-serif",
+            letterSpacing: "-4px",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)",
+            transform: "translateY(30%)",
+            WebkitTextStroke: "1px #666666",
+          }}
+        >
+          {index + 1}
+        </div>
       </div>
+
       <MovieDetailsModal
         movie={{ id, title, poster_path, media_type, release_date, vote_average, ...rest }}
         isOpen={showModal}
