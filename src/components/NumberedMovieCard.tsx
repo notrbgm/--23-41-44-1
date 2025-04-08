@@ -72,6 +72,7 @@ const NumberedMovieCard = ({
               fontWeight: "bold",
               letterSpacing: "-4px",
               borderRadius: "8px",
+              marginBottom: "10px", // Add some space below the number
             }}
           >
             {index + 1}
