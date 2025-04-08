@@ -61,10 +61,10 @@ const NumberedMovieCard = ({
         >
           {/* Number */}
           <div
-            className={`flex items-center justify-center w-[15%] h-full transition-all duration-300 ${
+            className={`absolute bottom-0 left-0 w-[15%] h-[20%] flex items-center justify-center transition-all duration-300 ${
               isHovered
-                ? "text-red-600 scale-150"
-                : "text-gray-400 scale-100 bg-gray-600 border-4 border-red-600"
+                ? "text-red-600 scale-150" // On hover: red color and larger
+                : "text-gray-400 scale-100 border-4 border-red-600 bg-transparent" // When not hovered: red border with no background
             }`}
             style={{
               fontFamily: "Netflix Sans, Arial Black, sans-serif",
