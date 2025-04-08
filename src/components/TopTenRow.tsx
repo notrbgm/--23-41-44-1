@@ -45,7 +45,7 @@ const TopTenRow = ({ title, movies }: TopTenRowProps) => {
             {topTenMovies.map((movie, index) => (
               <CarouselItem
                 key={movie.id}
-                className="pl-1 md:pl-2 basis-[45%] xs:basis-[40%] sm:basis-[35%] md:basis-[28%] lg:basis-[22%] xl:basis-[18%] flex-shrink-0"
+                className="pl-1 md:pl-2 basis-[45%] xs:basis-[40%] sm:basis-[35%] md:basis-[28%] lg:basis-[22%] xl:basis-[18%]"
               >
                 <div className="relative group">
                   <NumberedMovieCard
@@ -72,10 +72,10 @@ const TopTenRow = ({ title, movies }: TopTenRowProps) => {
           </CarouselContent>
 
           <CarouselPrevious
-            className={`absolute left-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ease-in-out ${isHovered ? 'opacity-100' : 'opacity-50'} hidden sm:flex`}
+            className={`absolute left-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'} hidden sm:flex`}
           />
           <CarouselNext
-            className={`absolute right-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ease-in-out ${isHovered ? 'opacity-100' : 'opacity-50'} hidden sm:flex`}
+            className={`absolute right-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'} hidden sm:flex`}
           />
         </Carousel>
       </div>
