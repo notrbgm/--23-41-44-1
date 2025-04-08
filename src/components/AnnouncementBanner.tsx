@@ -3,19 +3,31 @@ import { useEffect, useState } from "react"
 import { announcementConfig } from "@/config/announcement"
 import { cn } from "@/lib/utils"
 
+// Helper to get/set cookies
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"))
+  return match ? decodeURIComponent(match[2]) : null
+}
+
+function setCookie(name: string, value: string, days: number) {
+  const expires = new Date()
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`
+}
+
 export default function AnnouncementBanner() {
   const config = announcementConfig
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const dismissed = localStorage.getItem(`announcement_dismissed_${config.message}`)
+    const dismissed = getCookie(`announcement_dismissed_${config.message}`)
     if (config.enabled && dismissed !== "true") {
       setIsVisible(true)
     }
   }, [config.enabled, config.message])
 
   const handleClose = () => {
-    localStorage.setItem(`announcement_dismissed_${config.message}`, "true")
+    setCookie(`announcement_dismissed_${config.message}`, "true", 7) // Cookie lasts for 7 days
     setIsVisible(false)
   }
 
