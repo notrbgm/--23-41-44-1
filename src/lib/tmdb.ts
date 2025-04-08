@@ -26,7 +26,14 @@ export interface MovieResponse {
   page: number;
 }
 
+// Function to check if a movie is in the user's saved list
+export const isInMyList = (movieId: number): boolean => {
+  const myList = [123, 456, 789]; // Example list of saved movie IDs
+  return myList.includes(movieId);
+};
+
 export const searchContent = async (query: string): Promise<Movie[]> => {
+  // Fetch first 5 pages (100 results)
   const pages = await Promise.all(
     Array.from({ length: 5 }, (_, i) =>
       axios.get<MovieResponse>(
@@ -34,8 +41,14 @@ export const searchContent = async (query: string): Promise<Movie[]> => {
       )
     )
   );
+
+  // Combine all results
   const allResults = pages.flatMap(response => response.data.results);
-  return allResults.filter(item => item.poster_path).slice(0, 100);
+  
+  // Filter out items without posters and return up to 100 results
+  return allResults
+    .filter(item => item.poster_path)
+    .slice(0, 100);
 };
 
 export const getTrending = async (): Promise<Movie[]> => {
@@ -62,14 +75,6 @@ export const getNewReleases = async (): Promise<Movie[]> => {
 export const getMoviesByGenre = async (genreId: string, page: number = 1): Promise<MovieResponse> => {
   const response = await axios.get<MovieResponse>(
     `${BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}&vote_count.gte=100`
-  );
-  return response.data;
-};
-
-// NEW FUNCTION
-export const getCredits = async (movieId: number) => {
-  const response = await axios.get(
-    `${BASE_URL}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}`
   );
   return response.data;
 };
