@@ -16,23 +16,34 @@ interface NumberedMovieCardProps {
   recently_added?: boolean;
 }
 
-const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index, release_date, vote_average, recently_added, ...rest }: NumberedMovieCardProps) => {
+const NumberedMovieCard = ({
+  id,
+  title,
+  poster_path,
+  media_type = "movie",
+  index,
+  release_date,
+  vote_average,
+  recently_added,
+  ...rest
+}: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   // Use smaller image size for thumbnails
-  const imageUrl = poster_path 
-    ? `https://image.tmdb.org/t/p/w342${poster_path}` // w342 is more appropriate for thumbnails than w500
-    : "/placeholder.svg";
-  
+  const imageUrl =
+    poster_path
+      ? `https://image.tmdb.org/t/p/w342${poster_path}` // w342 is more appropriate for thumbnails than w500
+      : "/placeholder.svg";
+
   const handleCardClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowModal(true);
   };
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
-  const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
-  
+  const rating = vote_average ? Number(vote_average.toFixed(1)) : null;
+
   return (
     <>
       <div
@@ -40,38 +51,34 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Background Number */}
+        {/* Movie Card Container */}
         <div
-          className={`absolute flex items-center justify-end pr-[35%] md:pr-[40%] lg:pr-[45%] ${isHovered ? "text-red-600 scale-110" : "text-gray-400 scale-100"} transition-all duration-300`}
+          onClick={handleCardClick}
+          className="flex items-center cursor-pointer group w-full h-full transition-all duration-300"
           style={{
-            fontFamily: "Netflix Sans, Arial Black, sans-serif",
-            letterSpacing: "-4px",
-            fontSize: "calc(120px + 20px)", // 20% bigger than the original size
-            WebkitTextStroke: "1px #666666",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)",
+            transform: isHovered ? "scale(1.02)" : "scale(1)", // Subtle pop-out effect
           }}
         >
-          <span
-            className="font-black leading-none"
-            style={{
-              transform: "rotate(-90deg)", // Rotate number to the side of the card
-            }}
-          >
-            {index + 1}
-          </span>
-        </div>
-
-        {/* Movie Poster Container - overlapping the number */}
-        <div className={`relative w-[55%] ml-auto z-10 ${isHovered ? "scale-105" : "scale-100"} transition-all duration-300`}>
+          {/* Number */}
           <div
-            onClick={handleCardClick}
-            className="numbered-movie-card cursor-pointer group"
+            className={`flex items-center justify-center w-[15%] h-full transition-all duration-300 ${
+              isHovered
+                ? "text-red-600 scale-150"
+                : "text-gray-400 scale-100 bg-gray-600 border-4 border-red-600"
+            }`}
             style={{
-              backgroundColor: isHovered ? "transparent" : "#808080", // Grey background when not hovered
-              border: isHovered ? "none" : "3px solid red", // Red border when not hovered
+              fontFamily: "Netflix Sans, Arial Black, sans-serif",
+              fontSize: "100px",
+              fontWeight: "bold",
+              letterSpacing: "-4px",
               borderRadius: "8px",
             }}
           >
+            {index + 1}
+          </div>
+
+          {/* Movie Poster */}
+          <div className="relative w-[85%] h-full">
             <Image
               src={imageUrl}
               alt={title}
