@@ -9,39 +9,31 @@ import { Image } from "./ui/image";
 
 const Hero = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const { data: trending, isLoading } = useQuery({
+  const { data: trending } = useQuery({
     queryKey: ["trending"],
     queryFn: getTrending,
     refetchInterval: 1000 * 60 * 60,
   });
 
-  // Select a random movie
-  const movie = trending?.length ? trending[Math.floor(Math.random() * trending.length)] : null;
+  const movie = trending?.[Math.floor(Math.random() * (trending?.length || 1))];
 
-  if (isLoading) {
-    // Skeleton loader or loading spinner when the data is being fetched
-    return <div className="w-full h-[40vh] sm:h-[50vh] md:h-[56.25vw] bg-gray-300 animate-pulse"></div>;
-  }
-
-  if (!movie) {
-    return null;
-  }
+  if (!movie) return null;
 
   return (
     <div className="relative h-[40vh] sm:h-[50vh] md:h-[56.25vw] w-full mb-8">
       <div className="absolute inset-0">
-        {/* Responsive background image with a blur effect */}
         <Image
           src={getImageUrl(movie.backdrop_path, "original")}
-          alt={`Backdrop for ${movie.title || movie.name}`}
+          alt={movie.title || movie.name}
           className="w-full h-full object-cover"
           priority={true}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent backdrop-blur-md" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 hero-gradient" />
       </div>
       <div className="relative h-full flex items-center">
         <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
-          <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2 text-white shadow-md">
+          <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
             {movie.title || movie.name}
           </h1>
           <p className="text-xs sm:text-sm md:text-lg text-gray-200 line-clamp-2 md:line-clamp-3 animate-fade-in">
@@ -65,8 +57,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal for movie details */}
       {selectedMovie && (
         <MovieDetailsModal
           movie={selectedMovie}
