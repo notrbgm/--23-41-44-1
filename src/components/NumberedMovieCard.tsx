@@ -34,17 +34,19 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
   
   return (
     <>
-      <div className="relative w-full h-full">
-        {/* Background Number with Hover Animation */}
+      <div className="relative w-full h-full group"> {/* Add group here */}
+        {/* Background Number with Border and Hover Animation */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
           <span 
-            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-transform transform hover:scale-110"
+            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-transform transform group-hover:scale-110"
             style={{
-              color: '#E50914', // Netflix red color
+              color: '#2F2F2F', // Light black color
+              border: '3px solid #E50914', // Red border
               WebkitTextStroke: '1px #666666',
               fontFamily: 'Netflix Sans, Arial Black, sans-serif',
               letterSpacing: '-4px',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)',
+              padding: '10px', // Add padding to make the border visible
             }}
           >
             {index + 1}
