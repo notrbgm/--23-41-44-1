@@ -55,25 +55,27 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
         <div className="relative w-[45%] ml-auto z-10">
           <div 
             onClick={handleCardClick}
-            className="numbered-movie-card cursor-pointer group"
+            className="numbered-movie-card cursor-pointer group relative"
           >
             <Image
               src={imageUrl}
               alt={title}
-              className="w-full h-full rounded-sm object-cover"
+              className="w-full h-full rounded-sm object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-105"
               priority={index < 3} // Eagerly load first 3 items
             />
             {/* Recently Added Badge */}
             {recently_added && (
               <div className="absolute top-2 left-0 right-0 flex justify-center">
-                <div className="bg-red-600 text-[8px] xs:text-[10px] text-white px-2 py-0.5 font-medium rounded">
+                <div className="bg-red-600 text-[10px] xs:text-[12px] text-white px-3 py-1 font-semibold rounded shadow-lg transform transition-all hover:scale-105">
                   Recently Added
                 </div>
               </div>
             )}
             {/* Info Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
+              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2" title={title}>
+                {title}
+              </span>
               <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
