@@ -1,34 +1,43 @@
-import { useState } from "react";
-import { Star } from "lucide-react";
-import MovieDetailsModal from "./MovieDetailsModal";
-import { Image } from "./ui/image";
-import './NumberedMovieCard.css';  // Path to your CSS file
+import React, { useState } from 'react';
+import { Star } from 'lucide-react';
+import MovieDetailsModal from './MovieDetailsModal';
+import { Image } from './ui/image';
+import './NumberedMovieCard.css'; // Ensure this path is correct
 
+interface MovieProps {
+  id: number;
+  title: string;
+  poster_path: string;
+  media_type?: string;
+  index: number;
+  release_date: string;
+  vote_average: number;
+  recently_added?: boolean;
+}
 
-const NumberedMovieCard = ({
+const NumberedMovieCard: React.FC<MovieProps> = ({
   id,
   title,
   poster_path,
-  media_type = "movie",
+  media_type = 'movie',
   index,
   release_date,
   vote_average,
   recently_added,
-  ...rest
 }) => {
   const [showModal, setShowModal] = useState(false);
 
   const imageUrl = poster_path
     ? `https://image.tmdb.org/t/p/w342${poster_path}`
-    : "/placeholder.svg";
+    : '/placeholder.svg';
 
-  const handleCardClick = (e) => {
+  const handleCardClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowModal(true);
   };
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
-  const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
+  const rating = vote_average ? Number(vote_average.toFixed(1)) : null;
 
   return (
     <>
@@ -75,7 +84,7 @@ const NumberedMovieCard = ({
         </div>
       </div>
       <MovieDetailsModal
-        movie={{ id, title, poster_path, media_type, release_date, vote_average, ...rest }}
+        movie={{ id, title, poster_path, media_type, release_date, vote_average }}
         isOpen={showModal}
         onClose={() => setShowModal(false)}
       />
