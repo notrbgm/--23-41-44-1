@@ -48,15 +48,15 @@ const NumberedMovieCard = ({
         {/* Background Number */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
           <span
-            className="text-[90px] xs:text-[108px] sm:text-[126px] md:text-[144px] lg:text-[162px] xl:text-[180px] font-black leading-none transition-all duration-300 ease-in-out"
+            className="text-[87px] xs:text-[104px] sm:text-[120px] md:text-[139px] lg:text-[157px] xl:text-[174px] font-black leading-none transition-all duration-300 ease-in-out transform group-hover:scale-1"
             style={{
               color: "#333", // Light black color
               WebkitTextStroke: "2px red", // Red outline
               textShadow: "0 0 1px red", // Fallback for other browsers
               padding: "10px",
               borderRadius: "50%",
-              width: "72px", // 80px reduced by 10%
-              height: "72px", // 80px reduced by 10%
+              width: "69px", // 80px reduced by 13%
+              height: "69px", // 80px reduced by 13%
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
