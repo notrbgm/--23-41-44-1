@@ -34,20 +34,20 @@ const MovieCard = ({ id, title, poster_path, media_type = "movie", release_date,
     <>
       <div 
         onClick={handleCardClick}
-        className="movie-card relative rounded-md overflow-hidden cursor-pointer group"
+        className="movie-card relative rounded-lg overflow-hidden cursor-pointer group shadow-lg hover:shadow-2xl transform hover:scale-105 transition-transform duration-300"
       >
         <Image
           src={imageUrl}
           alt={title}
-          className="w-full h-full"
+          className="w-full h-full object-cover"
           priority={false} // Will be overridden by parent components for above-the-fold content
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-          <span className="text-white text-xs sm:text-sm font-medium line-clamp-2 mb-1 font-sans">{title}</span>
-          <div className="flex items-center gap-2 text-[10px] sm:text-xs text-gray-300 font-sans">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-5">
+          <span className="text-white text-sm sm:text-lg font-semibold line-clamp-2 mb-2">{title}</span>
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-300">
             {rating && (
               <div className="flex items-center gap-1">
-                <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                 <span className="font-medium">{rating}</span>
               </div>
             )}
