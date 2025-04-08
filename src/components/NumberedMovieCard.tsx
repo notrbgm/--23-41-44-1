@@ -37,17 +37,17 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
       <div className="relative w-full h-full">
         {/* Background Number */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
-          <span 
-            className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none"
-            style={{
-              color: '#000000',
-              WebkitTextStroke: '1px #666666',
-              fontFamily: 'Netflix Sans, Arial Black, sans-serif',
-              letterSpacing: '-4px',
-              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)',
-            }}
-          >
-            {index + 1}
+          <span
+  className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-extrabold leading-none"
+  style={{
+    color: '#FFFFFF',  // White text, similar to Netflix's style
+    WebkitTextStroke: '1px #000000',  // Black stroke for more visibility
+    fontFamily: 'Arial Black, Helvetica, sans-serif',  // Similar to Netflix Sans
+    letterSpacing: '-4px',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)',  // Subtle shadow for effect
+  }}
+>
+  {index + 1}
           </span>
         </div>
         
