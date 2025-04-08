@@ -17,15 +17,15 @@ interface TopTenRowProps {
 
 const TopTenRow = ({ title, movies }: TopTenRowProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   if (!movies?.length) return null;
 
-  // Only show first 10 movies
+  // Only show the first 10 movies
   const topTenMovies = movies.slice(0, 10);
 
   return (
-    <div 
-      className="space-y-2 relative category-row-container py-4"
+    <div
+      className="space-y-4 relative category-row-container py-4"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -37,13 +37,14 @@ const TopTenRow = ({ title, movies }: TopTenRowProps) => {
           opts={{
             align: "start",
             loop: true,
+            margin: 10, // Add spacing between items
           }}
           className="w-full"
         >
           <CarouselContent className="-ml-1 md:-ml-2">
             {topTenMovies.map((movie, index) => (
-              <CarouselItem 
-                key={movie.id} 
+              <CarouselItem
+                key={movie.id}
                 className="pl-1 md:pl-2 basis-[45%] xs:basis-[40%] sm:basis-[35%] md:basis-[28%] lg:basis-[22%] xl:basis-[18%]"
               >
                 <div className="relative group">
@@ -59,18 +60,21 @@ const TopTenRow = ({ title, movies }: TopTenRowProps) => {
                     recently_added={movie.recently_added}
                   />
                   {movie.recently_added && (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white text-[10px] xs:text-xs px-1.5 py-0.5 xs:px-2 xs:py-1 rounded font-medium">
-                      Recently Added
+                    <div className="absolute top-2 left-0 right-0 flex justify-center">
+                      <div className="bg-red-600 text-[8px] xs:text-[10px] text-white px-2 py-1 font-medium rounded">
+                        Recently Added
+                      </div>
                     </div>
                   )}
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious 
+
+          <CarouselPrevious
             className={`absolute left-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'} hidden sm:flex`}
           />
-          <CarouselNext 
+          <CarouselNext
             className={`absolute right-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'} hidden sm:flex`}
           />
         </Carousel>
@@ -79,4 +83,4 @@ const TopTenRow = ({ title, movies }: TopTenRowProps) => {
   );
 };
 
-export default TopTenRow; 
+export default TopTenRow;
