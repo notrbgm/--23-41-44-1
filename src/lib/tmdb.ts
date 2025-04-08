@@ -32,6 +32,7 @@ export const isInMyList = (movieId: number): boolean => {
   return myList.includes(movieId);
 };
 
+// Function to fetch search results based on a query
 export const searchContent = async (query: string): Promise<Movie[]> => {
   // Fetch first 5 pages (100 results)
   const pages = await Promise.all(
@@ -51,6 +52,7 @@ export const searchContent = async (query: string): Promise<Movie[]> => {
     .slice(0, 100);
 };
 
+// Function to fetch trending content
 export const getTrending = async (): Promise<Movie[]> => {
   const response = await axios.get<MovieResponse>(
     `${BASE_URL}/trending/all/day?api_key=${TMDB_API_KEY}`
@@ -58,6 +60,7 @@ export const getTrending = async (): Promise<Movie[]> => {
   return response.data.results;
 };
 
+// Function to fetch popular movies
 export const getPopular = async (sortBy: string = "popularity.desc", page: number = 1): Promise<MovieResponse> => {
   const response = await axios.get<MovieResponse>(
     `${BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&sort_by=${sortBy}&page=${page}&vote_count.gte=100`
@@ -65,6 +68,7 @@ export const getPopular = async (sortBy: string = "popularity.desc", page: numbe
   return response.data;
 };
 
+// Function to fetch new releases
 export const getNewReleases = async (): Promise<Movie[]> => {
   const response = await axios.get<MovieResponse>(
     `${BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}`
@@ -72,9 +76,18 @@ export const getNewReleases = async (): Promise<Movie[]> => {
   return response.data.results;
 };
 
+// Function to fetch movies by genre
 export const getMoviesByGenre = async (genreId: string, page: number = 1): Promise<MovieResponse> => {
   const response = await axios.get<MovieResponse>(
     `${BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}&vote_count.gte=100`
   );
   return response.data;
+};
+
+// Function to fetch similar movies based on movie ID
+export const getSimilarMovies = async (movieId: number): Promise<Movie[]> => {
+  const response = await axios.get<MovieResponse>(
+    `${BASE_URL}/movie/${movieId}/similar?api_key=${TMDB_API_KEY}`
+  );
+  return response.data.results;
 };
