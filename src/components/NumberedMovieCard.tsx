@@ -36,14 +36,15 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
     <>
       <div className="relative w-full h-full">
         {/* Background Number */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[35%]">
+        <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
           <span 
             className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none"
             style={{
               color: '#000000',
               WebkitTextStroke: '1px #666666',
               fontFamily: 'Netflix Sans, Arial Black, sans-serif',
-              letterSpacing: '-4px'
+              letterSpacing: '-4px',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)',
             }}
           >
             {index + 1}
@@ -59,7 +60,7 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
             <Image
               src={imageUrl}
               alt={title}
-              className="w-full h-full rounded-sm"
+              className="w-full h-full rounded-sm object-cover"
               priority={index < 3} // Eagerly load first 3 items
             />
             {/* Recently Added Badge */}
@@ -71,12 +72,12 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
               </div>
             )}
             {/* Info Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2 sm:p-3">
-              <span className="text-white text-[10px] sm:text-xs font-medium line-clamp-2 mb-1 font-sans">{title}</span>
-              <div className="flex items-center gap-2 text-[8px] sm:text-[10px] text-gray-300 font-sans">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
+              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
+              <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
-                    <Star className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
+                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
                     <span>{rating}</span>
                   </div>
                 )}
@@ -95,4 +96,4 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
   );
 }
 
-export default NumberedMovieCard; 
+export default NumberedMovieCard;
