@@ -51,7 +51,7 @@ const NumberedMovieCard = ({
             className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-black leading-none transition-all duration-300 ease-in-out"
             style={{
               color: "#333", // Light black color
-              border: "2px solid red", // Red border
+              WebkitTextStroke: "2px red", // Red outline
               padding: "10px",
               borderRadius: "50%",
               width: "80px",
