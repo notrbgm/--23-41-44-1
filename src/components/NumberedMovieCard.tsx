@@ -18,6 +18,7 @@ interface NumberedMovieCardProps {
 
 const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index, release_date, vote_average, recently_added, ...rest }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   
   // Use smaller image size for thumbnails
   const imageUrl = poster_path 
@@ -34,28 +35,42 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
   
   return (
     <>
-      <div className="relative w-full h-full">
+      <div
+        className="relative w-full h-full"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {/* Background Number */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
+        <div
+          className={`absolute flex items-center justify-end pr-[35%] md:pr-[40%] lg:pr-[45%] ${isHovered ? "text-red-600 scale-110" : "text-gray-400 scale-100"} transition-all duration-300`}
+          style={{
+            fontFamily: "Netflix Sans, Arial Black, sans-serif",
+            letterSpacing: "-4px",
+            fontSize: "calc(120px + 20px)", // 20% bigger than the original size
+            WebkitTextStroke: "1px #666666",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)",
+          }}
+        >
           <span
-  className="text-[100px] xs:text-[120px] sm:text-[140px] md:text-[160px] lg:text-[180px] xl:text-[200px] font-extrabold leading-none"
-  style={{
-    color: '#FFFFFF',  // White text, similar to Netflix's style
-    WebkitTextStroke: '1px #000000',  // Black stroke for more visibility
-    fontFamily: 'Arial Black, Helvetica, sans-serif',  // Similar to Netflix Sans
-    letterSpacing: '-4px',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.6)',  // Subtle shadow for effect
-  }}
->
-  {index + 1}
+            className="font-black leading-none"
+            style={{
+              transform: "rotate(-90deg)", // Rotate number to the side of the card
+            }}
+          >
+            {index + 1}
           </span>
         </div>
-        
+
         {/* Movie Poster Container - overlapping the number */}
-        <div className="relative w-[45%] ml-auto z-10">
-          <div 
+        <div className={`relative w-[55%] ml-auto z-10 ${isHovered ? "scale-105" : "scale-100"} transition-all duration-300`}>
+          <div
             onClick={handleCardClick}
             className="numbered-movie-card cursor-pointer group"
+            style={{
+              backgroundColor: isHovered ? "transparent" : "#808080", // Grey background when not hovered
+              border: isHovered ? "none" : "3px solid red", // Red border when not hovered
+              borderRadius: "8px",
+            }}
           >
             <Image
               src={imageUrl}
@@ -94,6 +109,6 @@ const NumberedMovieCard = ({ id, title, poster_path, media_type = "movie", index
       />
     </>
   );
-}
+};
 
 export default NumberedMovieCard;
