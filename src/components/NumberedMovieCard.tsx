@@ -54,7 +54,7 @@ const NumberedMovieCard = ({
           className="absolute inset-0 flex items-end justify-end"
           style={{
             right: "31%", // Horizontal position
-            bottom: "-10%", // Adjusted to move number up 2% more, tested and working
+            bottom: "-7%", // Adjusted to move number up 2% more, tested and working
           }}
         >
           <span
