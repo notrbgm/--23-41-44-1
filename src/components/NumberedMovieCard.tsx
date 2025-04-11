@@ -62,7 +62,7 @@ const NumberedMovieCard = ({
           onClick={handleCardClick} // Make the number container clickable
         >
           <span
-            className={`text-[80px] sm:text-[117px] font-black leading-none transition-all duration-300 ${
+            className={`text-[77px] sm:text-[117px] font-black leading-none transition-all duration-300 ${
               isHovered ? "scale-100" : "scale-90"
             }`}
             style={{
