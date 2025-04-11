@@ -15,7 +15,6 @@ import {
   type Movie,
   type MovieResponse,
 } from "@/lib/tmdb";
-import NumberedTitle from "./NumberedTitle"; // Import the NumberedTitle component
 
 const GENRE_IDS = {
   horror: "27",
@@ -91,11 +90,12 @@ const Index = () => {
   });
 
   return (
-    
-      
-        <NumberedTitle title="Top 10 Today" />
-      
-
+    <>
+      {trending && trending.length > 0 && (
+        
+          
+        
+      )}
       {popularMovies && popularMovies.length > 0 && (
         
           
@@ -146,7 +146,7 @@ const Index = () => {
           
         
       )}
-    
+    </>
   );
 };
 
