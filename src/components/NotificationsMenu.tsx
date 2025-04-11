@@ -6,21 +6,20 @@ import { useState, useEffect, useMemo } from "react";
 import { formatDistanceToNow } from "date-fns";
 import {
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AnimatePresence, motion } from "framer-motion";
 
 const NotificationsMenu = () => {
   const navigate = useNavigate();
   const [readSet, setReadSet] = useState<Set<string>>(() =>
     new Set(JSON.parse(localStorage.getItem("readNotifications") || "[]"))
   );
-  const [open, setOpen] = useState(false);
 
   const { data: notifications = [] } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotifications,
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5, // Refetch every 5 mins
   });
 
   useEffect(() => {
@@ -64,10 +63,13 @@ const NotificationsMenu = () => {
     }
   };
 
-  const sortedNotifications = [...notifications].sort((a, b) => b.timestamp - a.timestamp);
+  // Sort so newest notifications appear first
+  const sortedNotifications = [...notifications].sort(
+    (a, b) => b.timestamp - a.timestamp
+  );
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="relative" aria-label="Notifications">
           <Bell className="w-6 h-6 text-white hover:text-gray-300 transition-all duration-200" />
@@ -79,65 +81,58 @@ const NotificationsMenu = () => {
         </button>
       </DropdownMenuTrigger>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-80 bg-black/95 text-white border border-gray-800 p-2 rounded-lg shadow-xl z-50"
-          >
-            <div className="flex items-center justify-between mb-2 px-2">
-              <h3 className="font-semibold">Notifications</h3>
-              {notifications.length > 0 && (
-                <button
-                  onClick={markAllAsRead}
-                  className="text-xs text-gray-400 hover:text-white transition-all duration-200"
-                >
-                  Mark all as read
-                </button>
-              )}
-            </div>
-
-            <div
-              className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900"
-              aria-live="polite"
+      <DropdownMenuContent
+        align="end"
+        className="w-80 bg-black/95 text-white border border-gray-800 p-2 rounded-lg shadow-xl"
+      >
+        <div className="flex items-center justify-between mb-2 px-2">
+          <h3 className="font-semibold">Notifications</h3>
+          {notifications.length > 0 && (
+            <button
+              onClick={markAllAsRead}
+              className="text-xs text-gray-400 hover:text-white transition-all duration-200"
             >
-              {sortedNotifications.length === 0 ? (
-                <div className="text-center text-gray-400 py-4">No notifications</div>
-              ) : (
-                sortedNotifications.map(notification => {
-                  const isRead = readSet.has(notification.id);
-                  return (
-                    <div
-                      key={notification.id}
-                      onClick={() => handleNotificationClick(notification)}
-                      className={`flex items-start gap-3 p-3 cursor-pointer rounded-lg mb-1 transition-all duration-200 ${
-                        isRead
-                          ? "opacity-60 hover:bg-gray-800/30 border-l-4 border-gray-700"
-                          : "bg-gray-800 hover:bg-gray-700"
-                      }`}
-                    >
-                      <span className="text-xl">{getNotificationIcon(notification.type)}</span>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm">{notification.title}</p>
-                        <p className="text-sm text-gray-400 line-clamp-2">{notification.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {formatDistanceToNow(notification.timestamp, { addSuffix: true })}
-                        </p>
-                      </div>
-                      {!isRead && (
-                        <span className="w-2 h-2 rounded-full bg-blue-500 mt-1 flex-shrink-0" />
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              Mark all as read
+            </button>
+          )}
+        </div>
+
+        <div
+          className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900"
+          aria-live="polite"
+        >
+          {sortedNotifications.length === 0 ? (
+            <div className="text-center text-gray-400 py-4">No notifications</div>
+          ) : (
+            sortedNotifications.map(notification => {
+              const isRead = readSet.has(notification.id);
+              return (
+                <div
+                  key={notification.id}
+                  onClick={() => handleNotificationClick(notification)}
+                  className={`flex items-start gap-3 p-3 cursor-pointer rounded-lg mb-1 transition-all duration-200 ${
+                    isRead
+                      ? "opacity-60 hover:bg-gray-800/30 border-l-4 border-gray-700"
+                      : "bg-gray-800 hover:bg-gray-700"
+                  }`}
+                >
+                  <span className="text-xl">{getNotificationIcon(notification.type)}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm">{notification.title}</p>
+                    <p className="text-sm text-gray-400 line-clamp-2">{notification.message}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formatDistanceToNow(notification.timestamp, { addSuffix: true })}
+                    </p>
+                  </div>
+                  {!isRead && (
+                    <span className="w-2 h-2 rounded-full bg-blue-500 mt-1 flex-shrink-0" />
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 };
