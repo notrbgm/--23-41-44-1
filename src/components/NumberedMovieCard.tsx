@@ -29,9 +29,8 @@ const NumberedMovieCard = ({
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
-  // Use smaller image size for thumbnails
   const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w342${poster_path}` // w342 is more appropriate for thumbnails than w500
+    ? `https://image.tmdb.org/t/p/w342${poster_path}`
     : "/placeholder.svg";
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -44,57 +43,49 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full group">
         {/* Background Number */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
+        <div className="absolute inset-0 flex items-center justify-start pl-4">
           <span
-            className="text-[87px] xs:text-[104px] sm:text-[120px] md:text-[139px] lg:text-[157px] xl:text-[174px] font-black leading-none transition-all duration-300 ease-in-out transform group-hover:scale-1"
+            className="text-[120px] font-extrabold leading-none text-transparent"
             style={{
-              color: "#333", // Light black color
-              WebkitTextStroke: "2px red", // Red outline
-              textShadow: "0 0 1px red", // Fallback for other browsers
-              padding: "10px",
-              borderRadius: "50%",
-              width: "69px", // 80px reduced by 13%
-              height: "69px", // 80px reduced by 13%
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              WebkitTextStroke: "2px white",
+              backgroundImage: "linear-gradient(to bottom, red, yellow)",
+              WebkitBackgroundClip: "text",
             }}
           >
             {index + 1}
           </span>
         </div>
 
-        {/* Movie Poster Container - overlapping the number */}
-        <div className="relative w-[45%] ml-auto z-10">
-          <div onClick={handleCardClick} className="numbered-movie-card cursor-pointer group">
-            <Image
-              src={imageUrl}
-              alt={title}
-              className="w-full h-full rounded-sm object-cover"
-              priority={index < 3} // Eagerly load first 3 items
-            />
-            {/* Recently Added Badge */}
-            {recently_added && (
-              <div className="absolute top-2 left-0 right-0 flex justify-center">
-                <div className="bg-red-600 text-[8px] xs:text-[10px] text-white px-2 py-0.5 font-medium rounded">
-                  Recently Added
+        {/* Movie Poster Container */}
+        <div
+          className="relative w-[60%] ml-auto z-10 transform transition-transform duration-300 group-hover:scale-105"
+          onClick={handleCardClick}
+        >
+          <Image
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full rounded-lg object-cover"
+            priority={index < 3}
+          />
+          {/* Recently Added Badge */}
+          {recently_added && (
+            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+              Recently Added
+            </div>
+          )}
+          {/* Info Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+            <span className="text-white text-lg font-semibold mb-2">{title}</span>
+            <div className="flex items-center gap-2 text-sm text-gray-300">
+              {rating && (
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span>{rating}</span>
                 </div>
-              </div>
-            )}
-            {/* Info Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
-              <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
-                {rating && (
-                  <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                    <span>{rating}</span>
-                  </div>
-                )}
-                {year && <span>{year}</span>}
-              </div>
+              )}
+              {year && <span>{year}</span>}
             </div>
           </div>
         </div>
