@@ -1,109 +1,72 @@
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Movie } from "@/lib/tmdb";
+import NumberedMovieCard from "./NumberedMovieCard";
 import { useState } from "react";
-import { Star } from "lucide-react";
-import MovieDetailsModal from "./MovieDetailsModal";
-import { Image } from "./ui/image";
+import "./scrollbar-hide.css"; // Import scrollbar-hide.css
 
-interface NumberedMovieCardProps {
-  id: number;
+interface TopTenRowProps {
   title: string;
-  poster_path: string;
-  media_type?: string;
-  overview?: string;
-  backdrop_path?: string;
-  release_date?: string;
-  vote_average?: number;
-  index: number;
-  recently_added?: boolean;
+  movies: Movie[];
 }
 
-const NumberedMovieCard = ({
-  id,
-  title,
-  poster_path,
-  media_type = "movie",
-  index,
-  release_date,
-  vote_average,
-  recently_added,
-  ...rest
-}: NumberedMovieCardProps) => {
-  const [showModal, setShowModal] = useState(false);
+const TopTenRow = ({ title, movies }: TopTenRowProps) => {
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Handle missing poster images
-  const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w342${poster_path}`
-    : "/placeholder.svg";
+  if (!movies?.length) return null;
 
-  const handleCardClick = () => {
-    setShowModal(true);
-  };
-
-  const year = release_date ? new Date(release_date).getFullYear() : null;
-  const rating = vote_average ? Number(vote_average.toFixed(1)) : null;
+  const topTenMovies = movies.slice(0, 10);
 
   return (
-    <>
-      <div className="group relative flex h-full w-full items-center">
-        {/* Big Background Number */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[25%]">
-          <span
-            className="text-[120px] font-black leading-none text-transparent"
-            style={{
-              WebkitTextStroke: "2px #FF4500",
-              textShadow: "0 0 8px rgba(255,69,0,0.8)",
-            }}
-          >
-            {index + 1}
-          </span>
-        </div>
-
-        {/* Movie Poster */}
-        <div className="relative z-10 ml-auto w-[45%]">
-          <div
-            onClick={handleCardClick}
-            className="cursor-pointer overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105"
-          >
-            <Image
-              src={imageUrl}
-              alt={title}
-              className="aspect-[2/3] w-full object-cover"
-              priority={index < 3}
-            />
-
-            {/* Recently Added Badge */}
-            {recently_added && (
-              <div className="absolute left-2 top-2 rounded bg-red-600 px-2 py-1 text-xs font-medium text-white">
-                Recently Added
-              </div>
-            )}
-
-            {/* Hover Overlay */}
-            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-4">
-              <span className="mb-2 line-clamp-2 text-xs font-semibold text-white sm:text-sm">
-                {title}
-              </span>
-              <div className="flex items-center gap-2 text-xs text-gray-300">
-                {rating && (
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                    <span>{rating}</span>
-                  </div>
-                )}
-                {year && <span>{year}</span>}
-              </div>
-            </div>
-          </div>
-        </div>
+    <div
+      className="space-y-4 relative category-row-container py-4"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <h2 className="text-xl md:text-2xl font-medium px-[4%] text-white">
+        {title}
+      </h2>
+      <div className="relative px-[4%]">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-1 md:-ml-2">
+            {topTenMovies.map((movie, index) => (
+              <CarouselItem
+                key={movie.id}
+                className="pl-1 md:pl-2 basis-[45%] xs:basis-[40%] sm:basis-[35%] md:basis-[28%] lg:basis-[22%] xl:basis-[18%]"
+              >
+                <div className="relative group">
+                  <NumberedMovieCard
+                    id={movie.id}
+                    title={movie.title || movie.name || ""}
+                    poster_path={movie.poster_path}
+                    media_type={title === "Korean Dramas" ? "tv" : movie.media_type}
+                    overview={movie.overview}
+                    index={index}
+                    release_date={movie.release_date}
+                    vote_average={movie.vote_average}
+                    recently_added={movie.recently_added}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className={`absolute left-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'} hidden sm:flex`} />
+          <CarouselNext className={`absolute right-[2%] z-40 h-full w-[4%] bg-black/30 hover:bg-black/60 border-none rounded-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'} hidden sm:flex`} />
+        </Carousel>
       </div>
-
-      {/* Movie Details Modal */}
-      <MovieDetailsModal
-        movie={{ id, title, poster_path, media_type, release_date, vote_average, ...rest }}
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      />
-    </>
+    </div>
   );
 };
 
-export default NumberedMovieCard;
+export default TopTenRow;
