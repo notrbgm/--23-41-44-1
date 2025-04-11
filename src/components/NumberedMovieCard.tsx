@@ -77,7 +77,7 @@ const NumberedMovieCard = ({
                 <span
                   style={{
                     position: 'absolute',
-                    left: '-5%', // Adjust this value to control the overlap
+                    left: '-2%', // Adjust this value to control the overlap
                   }}
                 >
                   0
