@@ -56,6 +56,7 @@ const NumberedMovieCard = ({
             right: "31%", // NUMBER HORIZONTAL POSITION
             bottom: "-5%", // NUMBER VERTICAL POSITION
           }}
+          onClick={handleCardClick} // Make the number container clickable
         >
           <span
             className={`text-[80px] sm:text-[117px] font-black leading-none transition-all duration-300 ${
