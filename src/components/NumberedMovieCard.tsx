@@ -53,8 +53,8 @@ const NumberedMovieCard = ({
         <div
           className="absolute inset-0 flex items-end justify-end"
           style={{
-            right: "31%", // 1% adjustment
-            bottom: "-10%",
+            right: "31%", // Horizontal position
+            bottom: "-11%", // Adjusted to move number up 1%
           }}
         >
           <span
@@ -75,7 +75,7 @@ const NumberedMovieCard = ({
         <div className="relative z-10 ml-auto w-[45%]">
           <div
             onClick={handleCardClick}
-            className="cursor-pointer overflow-hidden rounded-lg"  // Removed transition-transform and hover:scale-105
+            className="cursor-pointer overflow-hidden rounded-lg" // Removed transition-transform and hover:scale-105
           >
             <Image
               src={imageUrl}
