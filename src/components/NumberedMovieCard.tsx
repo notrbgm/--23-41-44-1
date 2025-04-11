@@ -71,18 +71,22 @@ const NumberedMovieCard = ({
               position: 'relative', // Enable absolute positioning of the '0'
             }}
           >
-            1
-            {isTenth && (
-              <span
-                style={{
-                  position: 'absolute',
-                  left: '-5%', // Adjust this value to control the overlap
-                }}
-              >
-                0
-              </span>
+            {isTenth ? (
+              <>
+                1
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: '-5%', // Adjust this value to control the overlap
+                  }}
+                >
+                  0
+                </span>
+              </>
+            ) : (
+              index < 9 ? (index + 1) : null
             )}
-            {!isTenth && index + 1}
+              {index > 8 && index + 1}
           </span>
         </div>
 
