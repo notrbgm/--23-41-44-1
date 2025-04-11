@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
@@ -41,7 +41,34 @@ const NumberedMovieCard = ({
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
   const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
-  const isTenth = index === 9;
+
+  useEffect(() => {
+    if (index === 9) {
+      // Target the span containing the number
+      const spanElement = document.querySelector(`.numbered-card-${index} span`);
+
+      if (spanElement) {
+        // Get the text content of the span
+        const text = spanElement.textContent;
+
+        // Clear the span's content
+        spanElement.textContent = '';
+
+        // Create the '1' and '0' elements
+        const oneElement = document.createElement('span');
+        oneElement.textContent = '1';
+
+        const zeroElement = document.createElement('span');
+        zeroElement.textContent = '0';
+        zeroElement.style.position = 'absolute';
+        zeroElement.style.left = '-2%'; // Adjust the overlap here
+
+        // Append the elements to the span
+        spanElement.appendChild(oneElement);
+        spanElement.appendChild(zeroElement);
+      }
+    }
+  }, [index]);
 
   return (
     <>
@@ -52,7 +79,7 @@ const NumberedMovieCard = ({
       >
         {/* Aligned Number with Dark Mode Support */}
         <div
-          className="absolute inset-0 flex items-end justify-end cursor-pointer" // Added cursor-pointer
+          className={`absolute inset-0 flex items-end justify-end cursor-pointer numbered-card-${index}`} // Added cursor-pointer and numbered-card class
           style={{
             right: "44%", // NUMBER HORIZONTAL POSITION
             bottom: "-4%", // NUMBER VERTICAL POSITION
@@ -71,21 +98,7 @@ const NumberedMovieCard = ({
               position: 'relative', // Enable absolute positioning of the '0'
             }}
           >
-            {isTenth ? (
-              <>
-                1
-                <span
-                  style={{
-                    position: 'absolute',
-                    left: '-2%', // Adjust this value to control the overlap
-                  }}
-                >
-                  0
-                </span>
-              </>
-            ) : (
-              `${index + 1}`
-            )}
+            {index + 1}
           </span>
         </div>
 
