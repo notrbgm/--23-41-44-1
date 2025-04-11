@@ -84,9 +84,8 @@ const NumberedMovieCard = ({
                 </span>
               </>
             ) : (
-              index < 9 ? (index + 1) : null
+              index + 1
             )}
-              {index > 8 && index + 1}
           </span>
         </div>
 
