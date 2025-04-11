@@ -53,8 +53,8 @@ const NumberedMovieCard = ({
         <div
           className="absolute inset-0 flex items-end justify-end"
           style={{
-            right: "32%",
-            bottom: "-10%", // Number is shifted down, tested and working
+            right: "31%", // 1% adjustment
+            bottom: "-10%",
           }}
         >
           <span
@@ -62,7 +62,7 @@ const NumberedMovieCard = ({
               isHovered ? "scale-110" : "scale-100"
             }`}
             style={{
-              color: "rgba(51, 51, 51, 0.8)", // Consistent color
+              color: "rgba(51, 51, 51, 0.8)",
               WebkitTextStroke: "2px red",
               textShadow: "0 0 8px red",
             }}
@@ -71,11 +71,11 @@ const NumberedMovieCard = ({
           </span>
         </div>
 
-        {/* Movie Poster */}
+        {/* Movie Poster - Animation Disabled */}
         <div className="relative z-10 ml-auto w-[45%]">
           <div
             onClick={handleCardClick}
-            className="cursor-pointer overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105"
+            className="cursor-pointer overflow-hidden rounded-lg"  // Removed transition-transform and hover:scale-105
           >
             <Image
               src={imageUrl}
