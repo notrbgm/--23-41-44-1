@@ -62,9 +62,9 @@ const NumberedMovieCard = ({
               isHovered ? "scale-100" : "scale-90"
             }`}
             style={{
-              color: isHovered ? "red" : "rgba(51, 51, 51, 0.8)", // Change color on hover
-              WebkitTextStroke: "2px red",
-              textShadow: "0 0 8px red",
+              color: isHovered ? "#DC2626" : "rgba(51, 51, 51, 0.8)", // Change color on hover
+              WebkitTextStroke: "2px #DC2626",
+              textShadow: "0 0 8px #DC2626",
             }}
           >
             {index + 1}
