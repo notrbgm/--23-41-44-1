@@ -49,12 +49,12 @@ const NumberedMovieCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Mobile-Responsive Number Alignment */}
+        {/* Responsive Bottom Alignment & Dark Mode Fix */}
         <div
           className="absolute inset-0 flex items-end justify-end"
           style={{
             right: "32%",
-            bottom: "5%", // Adjust as needed for mobile
+            bottom: "5%", // Adjust for mobile
           }}
         >
           <span
@@ -62,7 +62,7 @@ const NumberedMovieCard = ({
               isHovered ? "scale-110" : "scale-100"
             }`}
             style={{
-              color: "rgba(51, 51, 51, 0.8)", // Consistent color
+              color: "rgba(51, 51, 51, 0.8)", // Light black with transparency
               WebkitTextStroke: "2px red",
               textShadow: "0 0 8px red",
             }}
