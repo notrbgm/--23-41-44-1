@@ -44,8 +44,8 @@ const NumberedMovieCard = ({
   return (
     <>
       <div className="relative group flex h-full w-full items-center">
-        {/* Modified Number Container */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[20%]">
+        {/* Background Number - Moved to the Left */}
+        <div className="absolute inset-0 flex items-center justify-end" style={{ right: '30%' }}>
           <span
             className="text-[120px] font-black leading-none text-transparent"
             style={{
@@ -57,7 +57,7 @@ const NumberedMovieCard = ({
           </span>
         </div>
 
-        {/* Poster Container */}
+        {/* Movie Poster */}
         <div className="relative z-10 ml-auto w-[45%]">
           <div
             onClick={handleCardClick}
@@ -70,12 +70,14 @@ const NumberedMovieCard = ({
               priority={index < 3}
             />
 
+            {/* Recently Added Badge */}
             {recently_added && (
               <div className="absolute left-2 top-2 rounded bg-red-600 px-2 py-1 text-xs font-medium text-white">
                 Recently Added
               </div>
             )}
 
+            {/* Info Overlay */}
             <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-4">
               <span className="mb-2 line-clamp-2 text-xs font-semibold text-white sm:text-sm">
                 {title}
