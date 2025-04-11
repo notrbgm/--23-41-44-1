@@ -15,6 +15,7 @@ import {
   type Movie,
   type MovieResponse,
 } from "@/lib/tmdb";
+import NumberedTitle from "./NumberedTitle"; // Import the NumberedTitle component
 
 const GENRE_IDS = {
   horror: "27",
@@ -28,7 +29,7 @@ const GENRE_IDS = {
 };
 
 const Index = () => {
-  const { data: popularMovies } = useQuery<Movie[]>({
+  const { data: popularMovies } = useQuery({
     queryKey: ["popular"],
     queryFn: async () => {
       const response = await getPopular();
@@ -36,17 +37,17 @@ const Index = () => {
     },
   });
 
-  const { data: newReleases } = useQuery<Movie[]>({
+  const { data: newReleases } = useQuery({
     queryKey: ["new-releases"],
     queryFn: getNewReleases,
   });
 
-  const { data: kdramas } = useQuery<Movie[]>({
+  const { data: kdramas } = useQuery({
     queryKey: ["kdramas"],
     queryFn: getKDramas,
   });
 
-  const { data: tvShows } = useQuery<Movie[]>({
+  const { data: tvShows } = useQuery({
     queryKey: ["tvshows"],
     queryFn: async () => {
       const response = await getTVShows();
@@ -54,94 +55,96 @@ const Index = () => {
     },
   });
 
-  const { data: trending } = useQuery<Movie[]>({
+  const { data: trending } = useQuery({
     queryKey: ["trending"],
     queryFn: getTrending,
   });
 
-  // Genre-specific queries
-  const { data: horrorMovies } = useQuery<MovieResponse>({
+  const { data: horrorMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.horror],
     queryFn: () => getMoviesByGenre(GENRE_IDS.horror),
   });
 
-  const { data: actionMovies } = useQuery<MovieResponse>({
+  const { data: actionMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.action],
     queryFn: () => getMoviesByGenre(GENRE_IDS.action),
   });
 
-  const { data: scifiMovies } = useQuery<MovieResponse>({
+  const { data: scifiMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.scifi],
     queryFn: () => getMoviesByGenre(GENRE_IDS.scifi),
   });
 
-  const { data: animationMovies } = useQuery<MovieResponse>({
+  const { data: animationMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.animation],
     queryFn: () => getMoviesByGenre(GENRE_IDS.animation),
   });
 
-  const { data: thrillerMovies } = useQuery<MovieResponse>({
+  const { data: thrillerMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.thriller],
     queryFn: () => getMoviesByGenre(GENRE_IDS.thriller),
   });
 
-  const { data: romanceMovies } = useQuery<MovieResponse>({
+  const { data: romanceMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.romance],
     queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
   });
 
-  const topTenTitle = (
-    
-      
-        TOP 10
-        
-          <b>CONTENT TODAY</b>
-        
-      
-    
-  );
-
   return (
     
       
+        <NumberedTitle title="Top 10 Today" />
       
-      
-      
-        {trending && trending.length > 0 && (
+      {popularMovies && popularMovies.length > 0 && (
+        
           
-        )}
-        {popularMovies && popularMovies.length > 0 && (
+        
+      )}
+      {newReleases && newReleases.length > 0 && (
+        
           
-        )}
-        {newReleases && newReleases.length > 0 && (
+        
+      )}
+      {kdramas && kdramas.length > 0 && (
+        
           
-        )}
-        {kdramas && kdramas.length > 0 && (
+        
+      )}
+      {tvShows && tvShows.length > 0 && (
+        
           
-        )}
-        {tvShows && tvShows.length > 0 && (
+        
+      )}
+      {horrorMovies?.results && horrorMovies.results.length > 0 && (
+        
           
-        )}
-        {horrorMovies?.results && horrorMovies.results.length > 0 && (
+        
+      )}
+      {actionMovies?.results && actionMovies.results.length > 0 && (
+        
           
-        )}
-        {actionMovies?.results && actionMovies.results.length > 0 && (
+        
+      )}
+      {scifiMovies?.results && scifiMovies.results.length > 0 && (
+        
           
-        )}
-        {scifiMovies?.results && scifiMovies.results.length > 0 && (
+        
+      )}
+      {animationMovies?.results && animationMovies.results.length > 0 && (
+        
           
-        )}
-        {animationMovies?.results && animationMovies.results.length > 0 && (
+        
+      )}
+      {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
+        
           
-        )}
-        {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
+        
+      )}
+      {romanceMovies?.results && romanceMovies.results.length > 0 && (
+        
           
-        )}
-        {romanceMovies?.results && romanceMovies.results.length > 0 && (
-          
-        )}
-      
-      
+        
+      )}
     
   );
 };
