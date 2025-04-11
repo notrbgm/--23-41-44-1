@@ -1,153 +1,57 @@
-import { useQuery } from "@tanstack/react-query";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import CategoryRow from "@/components/CategoryRow";
-import TopTenRow from "@/components/TopTenRow";
-import Footer from "@/components/Footer";
-import AnnouncementBanner from "@/components/AnnouncementBanner";
-import {
-  getPopular,
-  getNewReleases,
-  getMoviesByGenre,
-  getKDramas,
-  getTVShows,
-  getTrending,
-  type Movie,
-  type MovieResponse,
-} from "@/lib/tmdb";
+import React from "react";
 
-const GENRE_IDS = {
-  horror: "27",
-  scifi: "878",
-  animation: "16",
-  thriller: "53",
-  romance: "10749",
-  action: "28",
-  comedy: "35",
-  drama: "18"
-};
-
-const Index = () => {
-  const { data: popularMovies } = useQuery({
-    queryKey: ["popular"],
-    queryFn: async () => {
-      const response = await getPopular();
-      return response.results;
-    },
-  });
-
-  const { data: newReleases } = useQuery({
-    queryKey: ["new-releases"],
-    queryFn: getNewReleases,
-  });
-
-  const { data: kdramas } = useQuery({
-    queryKey: ["kdramas"],
-    queryFn: getKDramas,
-  });
-
-  const { data: tvShows } = useQuery({
-    queryKey: ["tvshows"],
-    queryFn: async () => {
-      const response = await getTVShows();
-      return response.results;
-    },
-  });
-
-  const { data: trending } = useQuery({
-    queryKey: ["trending"],
-    queryFn: getTrending,
-  });
-
-  const { data: horrorMovies } = useQuery({
-    queryKey: ["genre", GENRE_IDS.horror],
-    queryFn: () => getMoviesByGenre(GENRE_IDS.horror),
-  });
-
-  const { data: actionMovies } = useQuery({
-    queryKey: ["genre", GENRE_IDS.action],
-    queryFn: () => getMoviesByGenre(GENRE_IDS.action),
-  });
-
-  const { data: scifiMovies } = useQuery({
-    queryKey: ["genre", GENRE_IDS.scifi],
-    queryFn: () => getMoviesByGenre(GENRE_IDS.scifi),
-  });
-
-  const { data: animationMovies } = useQuery({
-    queryKey: ["genre", GENRE_IDS.animation],
-    queryFn: () => getMoviesByGenre(GENRE_IDS.animation),
-  });
-
-  const { data: thrillerMovies } = useQuery({
-    queryKey: ["genre", GENRE_IDS.thriller],
-    queryFn: () => getMoviesByGenre(GENRE_IDS.thriller),
-  });
-
-  const { data: romanceMovies } = useQuery({
-    queryKey: ["genre", GENRE_IDS.romance],
-    queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
-  });
-
+const TopTenHeader = () => {
   return (
-    <>
-      {trending && trending.length > 0 && (
+    <div className="group relative mb-6 flex items-center">
+      {/* Main Title */}
+      <div className="flex items-baseline">
+        <span className="text-3xl font-bold text-white">Top</span>
         
+        {/* Styled "10" with overlapping digits */}
+        <div className="relative mx-2">
+          {/* Digit "1" */}
+          <span 
+            className="text-[40px] font-black leading-none text-gray-800/80 transition-colors duration-300 
+                       group-hover:text-red-600"
+            style={{
+              WebkitTextStroke: "2px #DC2626",
+              textShadow: "0 0 8px #DC2626",
+              position: "relative",
+              zIndex: 10,
+            }}
+          >
+            1
+          </span>
           
-        
-      )}
-      {popularMovies && popularMovies.length > 0 && (
-        
-          
-        
-      )}
-      {newReleases && newReleases.length > 0 && (
-        
-          
-        
-      )}
-      {kdramas && kdramas.length > 0 && (
-        
-          
-        
-      )}
-      {tvShows && tvShows.length > 0 && (
-        
-          
-        
-      )}
-      {horrorMovies?.results && horrorMovies.results.length > 0 && (
-        
-          
-        
-      )}
-      {actionMovies?.results && actionMovies.results.length > 0 && (
-        
-          
-        
-      )}
-      {scifiMovies?.results && scifiMovies.results.length > 0 && (
-        
-          
-        
-      )}
-      {animationMovies?.results && animationMovies.results.length > 0 && (
-        
-          
-        
-      )}
-      {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
-        
-          
-        
-      )}
-      {romanceMovies?.results && romanceMovies.results.length > 0 && (
-        
-          
-        
-      )}
-    </>
+          {/* Digit "0" - overlapped */}
+          <span 
+            className="text-[40px] font-black leading-none text-gray-800/80 transition-colors duration-300 
+                       group-hover:text-red-600"
+            style={{
+              WebkitTextStroke: "2px #DC2626",
+              textShadow: "0 0 8px #DC2626",
+              position: "relative",
+              left: "-0.35em", // Adjust this for perfect overlap
+            }}
+          >
+            0
+          </span>
+        </div>
+
+        <span className="text-3xl font-bold text-white">Today</span>
+      </div>
+
+      {/* Optional: Add the red glow effect on hover */}
+      <div className="absolute inset-0 -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div 
+          className="absolute inset-0 blur-sm"
+          style={{
+            background: "radial-gradient(circle, rgba(220,38,38,0.3) 0%, transparent 70%)",
+          }}
+        />
+      </div>
+    </div>
   );
 };
 
-export default Index;
+export default TopTenHeader;
