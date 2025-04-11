@@ -1,169 +1,212 @@
-# CinePlay Hub
+🎬 CinePlay Hub
+About
+CinePlay Hub is your ultimate companion for discovering and streaming movies and TV shows. It aggregates content from multiple streaming platforms, offering a seamless and intuitive interface powered by the TMDB API.
 
-## About
+Whether you're on your phone or desktop, CinePlay Hub helps you browse, search, and curate your favorite titles—all in one place.
 
-CinePlay Hub is your ultimate streaming companion that aggregates content from various streaming services. It provides a seamless interface to browse and watch your favorite movies and TV shows, powered by the TMDB API.
+✨ Features
+🎬 Modern Interface – Browse movies and shows with a sleek, responsive UI
 
-## Features
+🔍 Powerful Search – Instantly find content across multiple types
 
-- 🎬 Browse movies and TV shows with a modern, responsive interface
-- 🔍 Powerful search functionality across multiple content types
-- 📱 Mobile-friendly design with touch gestures support
-- 🎯 Category-based browsing for easy content discovery
-- 💾 Personal watchlist to save your favorite content
-- 📢 Configurable announcement banner for important updates
-- 🌙 Beautiful UI with smooth animations and transitions
-- ⚡ Fast and responsive performance with React and Vite
+📱 Mobile-Optimized – Fully responsive design with touch gesture support
 
-## Development Setup
+🗂️ Category-Based Browsing – Quickly discover content by genre or type
 
-### Prerequisites
+💾 Personal Watchlist – Save and manage your favorite titles
 
-- Node.js 16.x or higher
-- npm 7.x or higher
-- A TMDB API key ([Get one here](https://www.themoviedb.org/documentation/api))
+📢 Announcement Banner – Easily configurable banner for important updates
 
-### Installation
+🌙 Smooth UI – Fluid animations with beautiful transitions
 
-```sh
-# Step 1: Clone the repository
+⚡ High Performance – Built using React and Vite for speed and efficiency
+
+🚀 Getting Started
+Prerequisites
+Node.js 22.x or higher
+
+npm 10.x or higher
+
+A TMDB API Key – Get yours here
+
+🔧 Installation
+sh
+Copy
+Edit
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory
+# Navigate to the project directory
 cd cineplay-hub
 
-# Step 3: Install dependencies
+# Install dependencies
 npm install
 
-# Step 4: Set up environment variables
+# Create and configure environment variables
 cp .env.example .env
-# Edit .env and add your TMDB API key
+# Open `.env` and insert your TMDB API key
 
-# Step 5: Start the development server
+# Start the development server
 npm run dev
-```
+🌐 API Configuration
+Visit TMDB to obtain an API key
 
-### API Configuration
+Duplicate .env.example as .env
 
-1. Get your TMDB API key from [TMDB's website](https://www.themoviedb.org/documentation/api)
-2. Copy `.env.example` to `.env`
-3. Replace `your_tmdb_api_key_here` with your actual API key
+Replace the placeholder with your actual API key
 
-## Technologies Used
+🛠️ Tech Stack
+Built using cutting-edge technologies for performance, scalability, and developer experience:
 
-This project leverages modern web technologies for optimal performance and developer experience:
+Vite – Lightning-fast build tool
 
-- **[Vite](https://vitejs.dev/)** - Next-generation frontend tooling
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-- **[React](https://reactjs.org/)** - UI component library
-- **[shadcn/ui](https://ui.shadcn.com/)** - Beautiful and accessible components
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[React Query](https://tanstack.com/query)** - Data fetching and caching
-- **[Framer Motion](https://www.framer.com/motion/)** - Smooth animations
-- **[React Router](https://reactrouter.com/)** - Client-side routing
+TypeScript – Typed JavaScript for better reliability
 
-## Deployment
+React – Component-based frontend framework
 
-The project can be deployed to various hosting platforms. Here are detailed instructions for popular options:
+shadcn/ui – Accessible and aesthetic UI components
 
-### Vercel (Recommended)
-1. Fork this repository
-2. Import your fork to Vercel
-3. Set up environment variables
-4. Deploy!
+Tailwind CSS – Utility-first styling framework
 
-### Netlify
-1. Fork this repository
-2. Connect your fork to Netlify
-3. Configure build settings:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
-4. Set up environment variables
-5. Deploy!
+React Query – Efficient data fetching and caching
 
-### GitHub Pages
-1. Update `vite.config.ts` with your base URL
-2. Run `npm run build`
-3. Deploy the `dist` directory
+Framer Motion – Smooth, elegant animations
 
-### Firebase Hosting
-1. Install Firebase CLI: `npm install -g firebase-tools`
-2. Login: `firebase login`
-3. Initialize: `firebase init hosting`
-4. Deploy: `firebase deploy`
+React Router – Dynamic client-side routing
 
-## Managing Announcements
+🌍 Deployment Options
+✅ Netlify (Recommended)
+Fork the repository
 
-The site includes a configurable announcement banner that can be updated without redeploying the application. The banner configuration is stored in `public/config/announcement.json`:
+Link it to Netlify
 
-```json
+Configure build settings:
+
+Build Command: npm run build
+
+Publish Directory: dist
+
+Set environment variables
+
+Deploy!
+
+⚠️ Vercel (Not Recommended)
+Fork and import into Vercel
+
+Add environment variables
+
+Deploy
+
+🧩 GitHub Pages
+Update vite.config.ts with your base URL
+
+Run npm run build
+
+Deploy the dist/ folder
+
+🔥 Firebase Hosting
+sh
+Copy
+Edit
+npm install -g firebase-tools
+firebase login
+firebase init hosting
+firebase deploy
+📢 Managing Announcement Banner
+Customize announcements via public/config/announcement.json:
+
+json
+Copy
+Edit
 {
-  "enabled": true,          // Set to false to hide the banner
+  "enabled": true,
   "message": "Your message here",
-  "link": "/optional/url",  // Optional URL when banner is clicked
+  "link": "/optional/url",
   "backgroundColor": "#2B8CBE",
   "textColor": "#FFFFFF"
 }
-```
+To Update:
+Edit the file with your desired message
 
-To update the banner:
-1. Edit `public/config/announcement.json` with your desired configuration
-2. Deploy the changes to your hosting platform
-3. Users will see the updated banner within 1 hour (configurable cache duration)
+Deploy changes to your host
 
-Note: Users can dismiss the banner by clicking the close button. The dismissal state is stored in their browser's local storage.
+Users will see the new banner within 1 hour (cache is configurable)
 
-## Contributing
+Users can dismiss the banner. Dismissal state is stored in local storage.
 
-We welcome contributions to CinePlay Hub! Here's how you can help:
+🤝 Contributing
+We welcome contributions! Here's how to get started:
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/improvement`)
-3. Make your changes
-4. Commit your changes (`git commit -am 'Add new feature'`)
-5. Push to the branch (`git push origin feature/improvement`)
-6. Create a Pull Request
+Fork the repository
 
-Please make sure to:
-- Follow the existing code style
-- Add tests if applicable
-- Update documentation as needed
-- Follow the [Code of Conduct](CODE_OF_CONDUCT.md)
+Create a new branch: git checkout -b feature/improvement
 
-### Development Guidelines
+Make your changes
 
-1. Use TypeScript for all new code
-2. Follow the existing component structure
-3. Use shadcn/ui components when possible
-4. Add proper error handling
-5. Keep bundle size in mind
-6. Write meaningful commit messages
+Commit: git commit -am 'Add new feature'
 
-## License
+Push: git push origin feature/improvement
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Create a Pull Request
 
-## Code of Conduct
+Guidelines
+Use TypeScript
 
-We are committed to fostering an open and welcoming environment. Please read our [Code of Conduct](CODE_OF_CONDUCT.md) for details on our code of conduct and the process for submitting pull requests to us.
+Follow the existing component structure
 
-## Support
+Prefer shadcn/ui components
 
-If you encounter any issues or have questions:
+Handle errors gracefully
 
-1. Check the [Issues](../../issues) page for existing problems
-2. Review the [Documentation](../../wiki) (if available)
-3. Create a new issue if your problem isn't already listed
-4. Provide as much detail as possible:
-   - Node.js version
-   - npm version
-   - Browser and version
-   - Error messages
-   - Steps to reproduce
-   - Expected vs actual behavior
+Keep bundle size in mind
 
-## Acknowledgments
+Write clear commit messages
 
-- [TMDB](https://www.themoviedb.org/) for providing the movie and TV show data
-- [shadcn/ui](https://ui.shadcn.com/) for the beautiful component library
-- All the Embbed Service We used 
+Add tests and update documentation when necessary
+
+Follow the Code of Conduct
+
+📜 License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+🧾 Code of Conduct
+We are committed to fostering a positive and inclusive community. Please read our Code of Conduct before contributing.
+
+🛠️ Support
+Need help?
+
+Check the Issues tab
+
+Visit the Documentation (if available)
+
+See if the issue exists in the original version
+
+Open a new issue with the following:
+
+Node.js and npm versions
+
+Browser and version
+
+Error logs
+
+Reproduction steps
+
+Expected vs. actual behavior
+
+🙏 Acknowledgments
+Thanks to TMDB for the content API
+
+Kudos to shadcn/ui for the amazing UI library
+
+Special thanks to all embedded services used
+
+📎 Notes for CinePlay Users
+The project directory tree is available in the root directory
+
+The file sw.js in /public and the ad snippet in index.html are related to advertisements.
+
+To disable ads: remove sw.js and the ad-related code from index.html.
+
+Keeping them helps support us financially. Thank you!
+
+Redirects from video servers originate from third-party sites, not CinePlay itself.
