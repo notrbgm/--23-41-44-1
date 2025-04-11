@@ -74,7 +74,7 @@ const NumberedMovieCard = ({
         </div>
 
         {/* Movie Poster - Animation Disabled */}
-        <div className="relative z-10 ml-auto w-[50%]">
+        <div className="relative z-10 ml-auto w-[60%]">
           <div
             onClick={handleCardClick}
             className="cursor-pointer overflow-hidden rounded-lg" // Removed transition-transform and hover:scale-105
