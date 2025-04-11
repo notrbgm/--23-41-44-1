@@ -57,11 +57,12 @@ const NumberedMovieCard = ({
         // Create the '1' and '0' elements
         const oneElement = document.createElement('span');
         oneElement.textContent = '1';
+        oneElement.style.position = 'relative';
 
         const zeroElement = document.createElement('span');
         zeroElement.textContent = '0';
-        zeroElement.style.position = 'absolute';
-        zeroElement.style.left = '-2%'; // Adjust the overlap here
+        zeroElement.style.position = 'relative';
+        zeroElement.style.left = '-0.2em'; // Adjust the overlap here
 
         // Append the elements to the span
         spanElement.appendChild(oneElement);
