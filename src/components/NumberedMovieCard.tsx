@@ -44,25 +44,26 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="relative group flex h-full w-full items-center"
-           onMouseEnter={() => setIsHovered(true)}
-           onMouseLeave={() => setIsHovered(false)}>
-
-        {/* Aligned Number with Dark Mode Support */}
+      <div
+        className="relative group flex h-full w-full items-center"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Mobile-Responsive Number Alignment */}
         <div
           className="absolute inset-0 flex items-end justify-end"
           style={{
-            right: '32%',
-            bottom: '10%', // Align to the bottom
-
+            right: "32%",
+            bottom: "5%", // Adjust as needed for mobile
           }}
         >
           <span
-            className={`text-[117px] font-black leading-none transition-all duration-300  ${isHovered ? 'scale-110' : 'scale-100'
-              } `}
+            className={`text-[80px] sm:text-[117px] font-black leading-none transition-all duration-300 ${
+              isHovered ? "scale-110" : "scale-100"
+            }`}
             style={{
-              color: 'rgba(51, 51, 51, 0.8)', // Consistent color in dark mode
-              WebkitTextStroke: "2px red", // Red outline
+              color: "rgba(51, 51, 51, 0.8)", // Consistent color
+              WebkitTextStroke: "2px red",
               textShadow: "0 0 8px red",
             }}
           >
@@ -110,7 +111,15 @@ const NumberedMovieCard = ({
       </div>
 
       <MovieDetailsModal
-        movie={{ id, title, poster_path, media_type, release_date, vote_average, ...rest }}
+        movie={{
+          id,
+          title,
+          poster_path,
+          media_type,
+          release_date,
+          vote_average,
+          ...rest,
+        }}
         isOpen={showModal}
         onClose={() => setShowModal(false)}
       />
