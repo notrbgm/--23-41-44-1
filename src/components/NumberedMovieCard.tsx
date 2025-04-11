@@ -43,7 +43,7 @@ const NumberedMovieCard = ({
   const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
 
   const numberToDisplay = index === 9 ? "10" : (index + 1).toString(); // Shorten text for index 9
-  const numberRightPosition = index < 3 ? "46%" : "40%";
+  const numberRightPosition = index < 9 ? "46%" : "35%";
 
   return (
     <>
