@@ -1,0 +1,39 @@
+import React, { useEffect } from 'react';
+
+interface NumberedTitleProps {
+  title: string;
+}
+
+const NumberedTitle: React.FC<NumberedTitleProps> = ({ title }) => {
+  useEffect(() => {
+    // Target the span containing the number
+    const spanElement = document.querySelector(`.numbered-title span`);
+    if (spanElement) {
+      // Get the text content of the span
+      const text = spanElement.textContent;
+      // Clear the span's content
+      spanElement.textContent = '';
+      // Create the '1' and '0' elements
+      const oneElement = document.createElement('span');
+      oneElement.textContent = '1';
+      oneElement.style.position = 'relative';
+      const zeroElement = document.createElement('span');
+      zeroElement.textContent = '0';
+      zeroElement.style.position = 'relative';
+      zeroElement.style.left = '-0.27em'; // Adjust the overlap here
+      spanElement.style.position = 'relative';
+      spanElement.style.left = '24%';
+      // Append the elements to the span
+      spanElement.appendChild(oneElement);
+      spanElement.appendChild(zeroElement);
+    }
+  }, []);
+
+  return (
+    
+      {title}
+    
+  );
+};
+
+export default NumberedTitle;
