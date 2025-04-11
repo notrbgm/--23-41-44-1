@@ -1,85 +1,138 @@
+import { useQuery } from "@tanstack/react-query";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import CategoryRow from "@/components/CategoryRow";
+import TopTenRow from "@/components/TopTenRow";
+import Footer from "@/components/Footer";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
-import { Movie } from "@/lib/tmdb";
-import NumberedMovieCard from "./NumberedMovieCard";
-import { useState } from "react";
+  getPopular,
+  getNewReleases,
+  getMoviesByGenre,
+  getKDramas,
+  getTVShows,
+  getTrending,
+  type Movie,
+  type MovieResponse,
+} from "@/lib/tmdb";
 
-interface TopTenRowProps {
-  title: string;
-  movies: Movie[];
-}
+const GENRE_IDS = {
+  horror: "27",
+  scifi: "878",
+  animation: "16",
+  thriller: "53",
+  romance: "10749",
+  action: "28",
+  comedy: "35",
+  drama: "18"
+};
 
-const TopTenRow = ({ title, movies }: TopTenRowProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+const Index = () => {
+  const { data: popularMovies } = useQuery<Movie[]>({
+    queryKey: ["popular"],
+    queryFn: async () => {
+      const response = await getPopular();
+      return response.results;
+    },
+  });
 
-  if (!movies?.length) return null;
+  const { data: newReleases } = useQuery<Movie[]>({
+    queryKey: ["new-releases"],
+    queryFn: getNewReleases,
+  });
 
-  // Only show first 10 movies
-  const topTenMovies = movies.slice(0, 10);
+  const { data: kdramas } = useQuery<Movie[]>({
+    queryKey: ["kdramas"],
+    queryFn: getKDramas,
+  });
+
+  const { data: tvShows } = useQuery<Movie[]>({
+    queryKey: ["tvshows"],
+    queryFn: async () => {
+      const response = await getTVShows();
+      return response.results;
+    },
+  });
+
+  const { data: trending } = useQuery<Movie[]>({
+    queryKey: ["trending"],
+    queryFn: getTrending,
+  });
+
+  // Genre-specific queries
+  const { data: horrorMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.horror],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.horror),
+  });
+
+  const { data: actionMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.action],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.action),
+  });
+
+  const { data: scifiMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.scifi],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.scifi),
+  });
+
+  const { data: animationMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.animation],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.animation),
+  });
+
+  const { data: thrillerMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.thriller],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.thriller),
+  });
+
+  const { data: romanceMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.romance],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
+  });
 
   return (
-    <div className="mx-4 space-y-2 md:mx-6">
-      <h2 className="text-xl font-semibold text-white md:text-2xl">
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          <span
-            style={{
-              fontSize: '40px', // Adjust the size as needed
-              fontWeight: 'bold',
-              position: 'relative',
-              WebkitTextStroke: '2px #DC2626',
-              color: 'rgba(51, 51, 51, 0.8)',
-              textShadow: '0 0 8px #DC2626',
-              letterSpacing: '-0.27em',
-              zIndex: 1,
-            }}
-          >
-            TOP 10
-          </span>
-          <span
-            style={{
-              position: 'absolute',
-              bottom: '-10px', // Adjust the vertical position as needed
-              left: '50%',
-              transform: 'translateX(-50%)',
-              fontSize: '12px', // Adjust the size to be smaller than "TOP 10"
-              fontWeight: 'bold',
-              color: 'white',
-              zIndex: 2,
-              whiteSpace: 'nowrap', // Prevent line breaks
-            }}
-          >
-            <b>CONTENT TODAY</b>
-          </span>
-        </div>
-      </h2>
-      <Carousel
-        opts={{
-          loop: true,
-          align: "start",
-        }}
-        className="relative"
-      >
-        <CarouselContent className="-ml-1 pl-1">
-          {topTenMovies.map((movie, index) => (
-            <CarouselItem key={movie.id} className="basis-1/2 md:basis-1/5 lg:basis-1/10">
-              <NumberedMovieCard
-                index={index}
-                {...movie}
-              />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="left-2 top-1/2 h-10 w-10 -translate-y-1/2 transform rounded-full bg-black/20 text-white focus:shadow-none" />
-        <CarouselNext className="right-2 top-1/2 h-10 w-10 -translate-y-1/2 transform rounded-full bg-black/20 text-white focus:shadow-none" />
-      </Carousel>
+    <div className="min-h-screen bg-netflix-black">
+      <Navbar />
+      <AnnouncementBanner />
+      <Hero />
+      <div className="space-y-8 pb-8">
+        {trending && trending.length > 0 && (
+          <TopTenRow title="Top 10 Today" movies={trending} />
+        )}
+        {popularMovies && popularMovies.length > 0 && (
+          <CategoryRow title="Popular Movies" movies={popularMovies} />
+        )}
+        {newReleases && newReleases.length > 0 && (
+          <CategoryRow title="New Releases" movies={newReleases} />
+        )}
+        {kdramas && kdramas.length > 0 && (
+          <CategoryRow title="K-Dramas" movies={kdramas} />
+        )}
+        {tvShows && tvShows.length > 0 && (
+          <CategoryRow title="TV Shows" movies={tvShows} />
+        )}
+        {horrorMovies?.results && horrorMovies.results.length > 0 && (
+          <CategoryRow title="Horror" movies={horrorMovies.results} />
+        )}
+        {actionMovies?.results && actionMovies.results.length > 0 && (
+          <CategoryRow title="Action & Adventure" movies={actionMovies.results} />
+        )}
+        {scifiMovies?.results && scifiMovies.results.length > 0 && (
+          <CategoryRow title="Sci-Fi & Fantasy" movies={scifiMovies.results} />
+        )}
+        {animationMovies?.results && animationMovies.results.length > 0 && (
+          <CategoryRow title="Animation" movies={animationMovies.results} />
+        )}
+        {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
+          <CategoryRow title="Thriller" movies={thrillerMovies.results} />
+        )}
+        {romanceMovies?.results && romanceMovies.results.length > 0 && (
+          <CategoryRow title="Romance" movies={romanceMovies.results} />
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };
 
-export default TopTenRow;
+export default Index;
