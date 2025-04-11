@@ -29,8 +29,9 @@ const NumberedMovieCard = ({
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
+  // Use a larger image size for better quality
   const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w342${poster_path}`
+    ? `https://image.tmdb.org/t/p/w500${poster_path}`
     : "/placeholder.svg";
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -45,11 +46,11 @@ const NumberedMovieCard = ({
     <>
       <div className="relative w-full h-full">
         {/* Number Overlay */}
-        <div className="absolute top-2 left-2 z-20">
+        <div className="absolute inset-0 flex items-center justify-center z-10">
           <span
-            className="text-2xl font-bold text-white opacity-80"
+            className="text-6xl font-extrabold text-white"
             style={{
-              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.7)",
+              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
             }}
           >
             {index + 1}
@@ -57,12 +58,12 @@ const NumberedMovieCard = ({
         </div>
 
         {/* Movie Poster Container */}
-        <div className="relative w-full z-10">
+        <div className="relative w-full z-0">
           <div onClick={handleCardClick} className="numbered-movie-card cursor-pointer group">
             <Image
               src={imageUrl}
               alt={title}
-              className="w-full h-full rounded-sm object-cover"
+              className="w-full h-full rounded-sm object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-105"
               priority={index < 3}
             />
             {/* Recently Added Badge */}
@@ -75,11 +76,11 @@ const NumberedMovieCard = ({
             )}
             {/* Info Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-sm font-semibold line-clamp-2 mb-2">{title}</span>
-              <div className="flex items-center gap-2 text-xs text-gray-300">
+              <span className="text-white text-lg font-semibold line-clamp-2 mb-2">{title}</span>
+              <div className="flex items-center gap-2 text-sm text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     <span>{rating}</span>
                   </div>
                 )}
