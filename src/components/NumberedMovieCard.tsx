@@ -43,22 +43,15 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="relative w-full h-full group">
+      <div className="relative w-full h-full">
         {/* Background Number */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
           <span
-            className="text-[87px] xs:text-[104px] sm:text-[120px] md:text-[139px] lg:text-[157px] xl:text-[174px] font-black leading-none transition-all duration-300 ease-in-out transform group-hover:scale-105"
+            className="text-[60px] xs:text-[70px] sm:text-[80px] md:text-[90px] lg:text-[100px] xl:text-[110px] font-black leading-none transform scale-75"
             style={{
               color: "#333",
-              WebkitTextStroke: "2px red",
+              WebkitTextStroke: "1.5px red",
               textShadow: "0 0 1px red",
-              padding: "10px",
-              borderRadius: "50%",
-              width: "69px",
-              height: "69px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
             }}
           >
             {index + 1}
@@ -67,7 +60,7 @@ const NumberedMovieCard = ({
 
         {/* Movie Poster Container */}
         <div className="relative w-[45%] ml-auto z-10">
-          <div onClick={handleCardClick} className="cursor-pointer">
+          <div onClick={handleCardClick} className="numbered-movie-card cursor-pointer group">
             <Image
               src={imageUrl}
               alt={title}
