@@ -65,7 +65,7 @@ const NumberedMovieCard = ({
         zeroElement.style.left = '-0.2em'; // Adjust the overlap here
 
                 spanElement.style.position = 'relative';
-                spanElement.style.left = '10%';
+                spanElement.style.left = '19%';
         // Append the elements to the span
         spanElement.appendChild(oneElement);
         spanElement.appendChild(zeroElement);
