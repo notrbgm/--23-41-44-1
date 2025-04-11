@@ -45,13 +45,11 @@ const NumberedMovieCard = ({
     <>
       <div className="relative w-full h-full">
         {/* Background Number */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
+        <div className="absolute top-2 left-2 z-20">
           <span
-            className="text-[60px] xs:text-[70px] sm:text-[80px] md:text-[90px] lg:text-[100px] xl:text-[110px] font-black leading-none transform scale-75"
+            className="text-4xl font-extrabold text-white opacity-80"
             style={{
-              color: "#333",
-              WebkitTextStroke: "1.5px red",
-              textShadow: "0 0 1px red",
+              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
             }}
           >
             {index + 1}
@@ -59,7 +57,7 @@ const NumberedMovieCard = ({
         </div>
 
         {/* Movie Poster Container */}
-        <div className="relative w-[45%] ml-auto z-10">
+        <div className="relative w-full z-10">
           <div onClick={handleCardClick} className="numbered-movie-card cursor-pointer group">
             <Image
               src={imageUrl}
@@ -70,15 +68,15 @@ const NumberedMovieCard = ({
             {/* Recently Added Badge */}
             {recently_added && (
               <div className="absolute top-2 left-0 right-0 flex justify-center">
-                <div className="bg-red-600 text-[8px] xs:text-[10px] text-white px-2 py-0.5 font-medium rounded">
+                <div className="bg-red-600 text-xs text-white px-2 py-0.5 font-medium rounded">
                   Recently Added
                 </div>
               </div>
             )}
             {/* Info Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
-              <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
+              <span className="text-white text-sm font-semibold line-clamp-2 mb-2">{title}</span>
+              <div className="flex items-center gap-2 text-xs text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
                     <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
