@@ -43,11 +43,11 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full group">
         {/* Background Number */}
         <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
           <span
-            className="text-[87px] xs:text-[104px] sm:text-[120px] md:text-[139px] lg:text-[157px] xl:text-[174px] font-black leading-none transition-all duration-300 ease-in-out transform group-hover:scale-1"
+            className="text-[87px] xs:text-[104px] sm:text-[120px] md:text-[139px] lg:text-[157px] xl:text-[174px] font-black leading-none transition-all duration-300 ease-in-out transform group-hover:scale-105"
             style={{
               color: "#333",
               WebkitTextStroke: "2px red",
@@ -67,10 +67,7 @@ const NumberedMovieCard = ({
 
         {/* Movie Poster Container */}
         <div className="relative w-[45%] ml-auto z-10">
-          <div
-            onClick={handleCardClick}
-            className="numbered-movie-card cursor-pointer group transform transition-transform duration-300 hover:scale-105"
-          >
+          <div onClick={handleCardClick} className="cursor-pointer">
             <Image
               src={imageUrl}
               alt={title}
@@ -87,9 +84,7 @@ const NumberedMovieCard = ({
             )}
             {/* Info Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">
-                {title}
-              </span>
+              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
               <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
