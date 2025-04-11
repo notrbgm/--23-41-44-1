@@ -71,7 +71,9 @@ const NumberedMovieCard = ({
               position: 'relative', // Enable absolute positioning of the '0'
             }}
           >
-            {isTenth ? (
+            {index !== 9 ? (
+              index + 1
+            ) : (
               <>
                 1
                 <span
@@ -83,8 +85,6 @@ const NumberedMovieCard = ({
                   0
                 </span>
               </>
-            ) : (
-              index + 1
             )}
           </span>
         </div>
