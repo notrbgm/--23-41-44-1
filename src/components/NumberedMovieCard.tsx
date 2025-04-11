@@ -42,10 +42,6 @@ const NumberedMovieCard = ({
   const year = release_date ? new Date(release_date).getFullYear() : null;
   const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
 
-  const numberToDisplay = index === 9 ? "10" : (index + 1).toString(); // Shorten text for index 9
-  const numberRightPosition = index < 9 ? "46%" : "35%";
-    const letterSpacing = index === 9 ? "-0.05em" : "normal";
-
   return (
     <>
       <div
@@ -57,7 +53,7 @@ const NumberedMovieCard = ({
         <div
           className="absolute inset-0 flex items-end justify-end cursor-pointer" // Added cursor-pointer
           style={{
-            right: numberRightPosition, // NUMBER HORIZONTAL POSITION
+            right: "46%", // NUMBER HORIZONTAL POSITION
             bottom: "-5%", // NUMBER VERTICAL POSITION
           }}
           onClick={handleCardClick} // Make the number container clickable
@@ -71,10 +67,9 @@ const NumberedMovieCard = ({
               WebkitTextStroke: "2px #DC2626",
               textShadow: "0 0 8px #DC2626",
               userSelect: "none", // Prevent text selection
-                letterSpacing: letterSpacing,
             }}
           >
-            {numberToDisplay}
+            {index + 1}
           </span>
         </div>
 
