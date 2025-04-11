@@ -28,7 +28,7 @@ const NumberedMovieCard = ({
   ...rest
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const imageUrl = poster_path
     ? `https://image.tmdb.org/t/p/w342${poster_path}`
@@ -41,6 +41,7 @@ const NumberedMovieCard = ({
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
   const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
+  const isTenth = index === 9;
 
   return (
     <>
@@ -67,9 +68,21 @@ const NumberedMovieCard = ({
               WebkitTextStroke: "2px #DC2626",
               textShadow: "0 0 8px #DC2626",
               userSelect: "none", // Prevent text selection
+              position: 'relative', // Enable absolute positioning of the '0'
             }}
           >
-            {index + 1}
+            1
+            {isTenth && (
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-5%', // Adjust this value to control the overlap
+                }}
+              >
+                0
+              </span>
+            )}
+            {!isTenth && index + 1}
           </span>
         </div>
 
