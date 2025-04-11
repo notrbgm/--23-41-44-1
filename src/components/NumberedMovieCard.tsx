@@ -44,12 +44,12 @@ const NumberedMovieCard = ({
   return (
     <>
       <div className="relative w-full h-full">
-        {/* Background Number */}
+        {/* Number Overlay */}
         <div className="absolute top-2 left-2 z-20">
           <span
-            className="text-4xl font-extrabold text-white opacity-80"
+            className="text-2xl font-bold text-white opacity-80"
             style={{
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.7)",
             }}
           >
             {index + 1}
