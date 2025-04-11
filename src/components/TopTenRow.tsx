@@ -11,7 +11,7 @@ import { useState } from "react";
 import "./scrollbar-hide.css"; // Import scrollbar-hide.css
 
 interface TopTenRowProps {
-  title: string;
+  title: React.ReactNode;
   movies: Movie[];
 }
 
