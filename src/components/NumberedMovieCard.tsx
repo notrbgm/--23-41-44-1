@@ -44,6 +44,7 @@ const NumberedMovieCard = ({
 
   const numberToDisplay = index === 9 ? "10" : (index + 1).toString(); // Shorten text for index 9
   const numberRightPosition = index < 9 ? "46%" : "35%";
+    const letterSpacing = index === 9 ? "-0.05em" : "normal";
 
   return (
     <>
@@ -70,6 +71,7 @@ const NumberedMovieCard = ({
               WebkitTextStroke: "2px #DC2626",
               textShadow: "0 0 8px #DC2626",
               userSelect: "none", // Prevent text selection
+                letterSpacing: letterSpacing,
             }}
           >
             {numberToDisplay}
