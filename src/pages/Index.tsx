@@ -95,6 +95,7 @@ const Index = () => {
       
         <NumberedTitle title="Top 10 Today" />
       
+
       {popularMovies && popularMovies.length > 0 && (
         
           
