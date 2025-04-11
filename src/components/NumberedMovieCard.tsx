@@ -28,7 +28,7 @@ const NumberedMovieCard = ({
   ...rest
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
   const imageUrl = poster_path
     ? `https://image.tmdb.org/t/p/w342${poster_path}`
@@ -51,7 +51,7 @@ const NumberedMovieCard = ({
       >
         {/* Aligned Number with Dark Mode Support */}
         <div
-          className="absolute inset-0 flex items-end justify-end"
+          className="absolute inset-0 flex items-end justify-end cursor-pointer" // Added cursor-pointer
           style={{
             right: "31%", // NUMBER HORIZONTAL POSITION
             bottom: "-5%", // NUMBER VERTICAL POSITION
@@ -66,6 +66,7 @@ const NumberedMovieCard = ({
               color: isHovered ? "#DC2626" : "rgba(51, 51, 51, 0.8)", // Change color on hover
               WebkitTextStroke: "2px #DC2626",
               textShadow: "0 0 8px #DC2626",
+              userSelect: "none", // Prevent text selection
             }}
           >
             {index + 1}
