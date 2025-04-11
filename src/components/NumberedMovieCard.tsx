@@ -53,7 +53,7 @@ const NumberedMovieCard = ({
         <div
           className="absolute inset-0 flex items-end justify-end cursor-pointer" // Added cursor-pointer
           style={{
-            right: "31%", // NUMBER HORIZONTAL POSITION
+            right: "29%", // NUMBER HORIZONTAL POSITION
             bottom: "-5%", // NUMBER VERTICAL POSITION
           }}
           onClick={handleCardClick} // Make the number container clickable
