@@ -90,82 +90,59 @@ const Index = () => {
     queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
   });
 
-    const topTenTitle = (
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-            <span
-                style={{
-                    fontSize: '40px',
-                    fontWeight: 'bold',
-                    position: 'relative',
-                    WebkitTextStroke: '2px #DC2626',
-                    color: 'rgba(51, 51, 51, 0.8)',
-                    textShadow: '0 0 8px #DC2626',
-                    letterSpacing: '-0.27em',
-                    zIndex: 1,
-                }}
-            >
-                TOP 10
-            </span>
-            <span
-                style={{
-                    position: 'absolute',
-                    bottom: '-10px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    fontSize: '12px',
-                    fontWeight: 'bold',
-                    color: 'white',
-                    zIndex: 2,
-                    whiteSpace: 'nowrap',
-                }}
-            >
-                <b>CONTENT TODAY</b>
-            </span>
-        </div>
-    );
+  const topTenTitle = (
+    
+      
+        TOP 10
+        
+          <b>CONTENT TODAY</b>
+        
+      
+    
+  );
 
   return (
-    <div className="min-h-screen bg-netflix-black">
-      <Navbar />
-      <AnnouncementBanner />
-      <Hero />
-      <div className="space-y-8 pb-8">
+    
+      
+      
+      
+      
         {trending && trending.length > 0 && (
-          <TopTenRow title={topTenTitle} movies={trending} />
+          
         )}
         {popularMovies && popularMovies.length > 0 && (
-          <CategoryRow title="Popular Movies" movies={popularMovies} />
+          
         )}
         {newReleases && newReleases.length > 0 && (
-          <CategoryRow title="New Releases" movies={newReleases} />
+          
         )}
         {kdramas && kdramas.length > 0 && (
-          <CategoryRow title="K-Dramas" movies={kdramas} />
+          
         )}
         {tvShows && tvShows.length > 0 && (
-          <CategoryRow title="TV Shows" movies={tvShows} />
+          
         )}
         {horrorMovies?.results && horrorMovies.results.length > 0 && (
-          <CategoryRow title="Horror" movies={horrorMovies.results} />
+          
         )}
         {actionMovies?.results && actionMovies.results.length > 0 && (
-          <CategoryRow title="Action & Adventure" movies={actionMovies.results} />
+          
         )}
         {scifiMovies?.results && scifiMovies.results.length > 0 && (
-          <CategoryRow title="Sci-Fi & Fantasy" movies={scifiMovies.results} />
+          
         )}
         {animationMovies?.results && animationMovies.results.length > 0 && (
-          <CategoryRow title="Animation" movies={animationMovies.results} />
+          
         )}
         {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
-          <CategoryRow title="Thriller" movies={thrillerMovies.results} />
+          
         )}
         {romanceMovies?.results && romanceMovies.results.length > 0 && (
-          <CategoryRow title="Romance" movies={romanceMovies.results} />
+          
         )}
-      </div>
-      <Footer />
-    </div>
+      
+      
+    
   );
 };
 
