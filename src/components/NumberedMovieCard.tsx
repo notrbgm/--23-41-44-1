@@ -28,6 +28,7 @@ const NumberedMovieCard = ({
   ...rest
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const imageUrl = poster_path
     ? `https://image.tmdb.org/t/p/w342${poster_path}`
@@ -43,14 +44,23 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="relative group flex h-full w-full items-center">
-        {/* Background Number - Moved to the Left */}
-        <div className="absolute inset-0 flex items-center justify-end" style={{ right: '30%' }}>
+      <div className="relative group flex h-full w-full items-center"
+           onMouseEnter={() => setIsHovered(true)}
+           onMouseLeave={() => setIsHovered(false)}>
+
+        {/* Background Number with Hover Animation */}
+        <div
+          className="absolute inset-0 flex items-center justify-end"
+          style={{ right: '32%' }} // Adjusted right position
+        >
           <span
-            className="text-[120px] font-black leading-none text-transparent"
+            className={`text-[120px] font-black leading-none transition-all duration-300 ${
+              isHovered ? 'scale-110' : 'scale-100'
+            }`}
             style={{
-              WebkitTextStroke: "2px #FF4500",
-              textShadow: "0 0 8px rgba(255,69,0,0.8)",
+              color: '#333', // Light black color
+              WebkitTextStroke: "2px red", // Red outline
+              textShadow: "0 0 8px red",
             }}
           >
             {index + 1}
