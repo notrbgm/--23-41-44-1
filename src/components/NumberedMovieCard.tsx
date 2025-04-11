@@ -29,12 +29,12 @@ const NumberedMovieCard = ({
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
-  // Handle missing poster images
   const imageUrl = poster_path
     ? `https://image.tmdb.org/t/p/w342${poster_path}`
     : "/placeholder.svg";
 
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     setShowModal(true);
   };
 
@@ -43,8 +43,8 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="group relative flex h-full w-full items-center">
-        {/* Big Background Number */}
+      <div className="relative group flex h-full w-full items-center">
+        {/* Background Number */}
         <div className="absolute inset-0 flex items-center justify-end pr-[25%]">
           <span
             className="text-[120px] font-black leading-none text-transparent"
@@ -77,7 +77,7 @@ const NumberedMovieCard = ({
               </div>
             )}
 
-            {/* Hover Overlay */}
+            {/* Info Overlay */}
             <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-4">
               <span className="mb-2 line-clamp-2 text-xs font-semibold text-white sm:text-sm">
                 {title}
@@ -96,7 +96,6 @@ const NumberedMovieCard = ({
         </div>
       </div>
 
-      {/* Movie Details Modal */}
       <MovieDetailsModal
         movie={{ id, title, poster_path, media_type, release_date, vote_average, ...rest }}
         isOpen={showModal}
