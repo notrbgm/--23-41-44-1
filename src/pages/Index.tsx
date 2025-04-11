@@ -90,39 +90,39 @@ const Index = () => {
     queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
   });
 
-  const topTenTitle = (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <span
-        style={{
-          fontSize: '40px',
-          fontWeight: 'bold',
-          position: 'relative',
-          WebkitTextStroke: '2px #DC2626',
-          color: 'rgba(51, 51, 51, 0.8)',
-          textShadow: '0 0 8px #DC2626',
-          letterSpacing: '-0.27em',
-          zIndex: 1,
-        }}
-      >
-        TOP 10
-      </span>
-      <span
-        style={{
-          position: 'absolute',
-          bottom: '-10px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          color: 'white',
-          zIndex: 2,
-          whiteSpace: 'nowrap',
-        }}
-      >
-        <b>CONTENT TODAY</b>
-      </span>
-    </div>
-  );
+    const topTenTitle = (
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+            <span
+                style={{
+                    fontSize: '40px',
+                    fontWeight: 'bold',
+                    position: 'relative',
+                    WebkitTextStroke: '2px #DC2626',
+                    color: 'rgba(51, 51, 51, 0.8)',
+                    textShadow: '0 0 8px #DC2626',
+                    letterSpacing: '-0.27em',
+                    zIndex: 1,
+                }}
+            >
+                TOP 10
+            </span>
+            <span
+                style={{
+                    position: 'absolute',
+                    bottom: '-10px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    color: 'white',
+                    zIndex: 2,
+                    whiteSpace: 'nowrap',
+                }}
+            >
+                <b>CONTENT TODAY</b>
+            </span>
+        </div>
+    );
 
   return (
     <div className="min-h-screen bg-netflix-black">
