@@ -58,11 +58,11 @@ const NumberedMovieCard = ({
           }}
         >
           <span
-            className={`text-[80px] sm:text-[117px] font-black leading-none transition-all duration-300 ${ // HOVER ANIMATION SCALE SPEED
-              isHovered ? "scale-100" : "scale-90" // HOVER ANIMATION SCALE VALUE
+            className={`text-[80px] sm:text-[117px] font-black leading-none transition-all duration-300 ${
+              isHovered ? "scale-100" : "scale-90"
             }`}
             style={{
-              color: "rgba(51, 51, 51, 0.8)",
+              color: isHovered ? "red" : "rgba(51, 51, 51, 0.8)", // Change color on hover
               WebkitTextStroke: "2px red",
               textShadow: "0 0 8px red",
             }}
