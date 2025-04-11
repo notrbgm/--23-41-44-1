@@ -29,9 +29,8 @@ const NumberedMovieCard = ({
 }: NumberedMovieCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
-  // Use smaller image size for thumbnails
   const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w342${poster_path}` // w342 is more appropriate for thumbnails than w500
+    ? `https://image.tmdb.org/t/p/w342${poster_path}`
     : "/placeholder.svg";
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -44,52 +43,49 @@ const NumberedMovieCard = ({
 
   return (
     <>
-      <div className="relative w-full h-full">
+      <div className="group relative flex h-full w-full items-center">
         {/* Background Number */}
-        <div className="absolute inset-0 flex items-center justify-end pr-[30%] md:pr-[35%] lg:pr-[40%]">
+        <div className="absolute inset-0 flex items-center justify-end pr-[25%]">
           <span
-            className="text-[87px] xs:text-[104px] sm:text-[120px] md:text-[139px] lg:text-[157px] xl:text-[174px] font-black leading-none transition-all duration-300 ease-in-out transform group-hover:scale-1"
+            className="text-[120px] font-black leading-none text-transparent transition-all duration-300"
             style={{
-              color: "#333", // Light black color
-              WebkitTextStroke: "2px red", // Red outline
-              textShadow: "0 0 1px red", // Fallback for other browsers
-              padding: "10px",
-              borderRadius: "50%",
-              width: "69px", // 80px reduced by 13%
-              height: "69px", // 80px reduced by 13%
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              WebkitTextStroke: "2px #FF4500",
+              textShadow: "0 0 8px rgba(255,69,0,0.8)",
             }}
           >
             {index + 1}
           </span>
         </div>
 
-        {/* Movie Poster Container - overlapping the number */}
-        <div className="relative w-[45%] ml-auto z-10">
-          <div onClick={handleCardClick} className="numbered-movie-card cursor-pointer group">
+        {/* Movie Poster */}
+        <div className="relative z-10 ml-auto w-[45%]">
+          <div
+            onClick={handleCardClick}
+            className="cursor-pointer overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105"
+          >
             <Image
               src={imageUrl}
               alt={title}
-              className="w-full h-full rounded-sm object-cover"
-              priority={index < 3} // Eagerly load first 3 items
+              className="aspect-[2/3] w-full object-cover"
+              priority={index < 3}
             />
+
             {/* Recently Added Badge */}
             {recently_added && (
-              <div className="absolute top-2 left-0 right-0 flex justify-center">
-                <div className="bg-red-600 text-[8px] xs:text-[10px] text-white px-2 py-0.5 font-medium rounded">
-                  Recently Added
-                </div>
+              <div className="absolute left-2 top-2 rounded bg-red-600 px-2 py-1 text-xs font-medium text-white">
+                Recently Added
               </div>
             )}
+
             {/* Info Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4">
-              <span className="text-white text-[12px] sm:text-xs font-semibold line-clamp-2 mb-2">{title}</span>
-              <div className="flex items-center gap-2 text-[10px] sm:text-[12px] text-gray-300">
+            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-4">
+              <span className="mb-2 line-clamp-2 text-xs font-semibold text-white sm:text-sm">
+                {title}
+              </span>
+              <div className="flex items-center gap-2 text-xs text-gray-300">
                 {rating && (
                   <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                     <span>{rating}</span>
                   </div>
                 )}
@@ -99,6 +95,7 @@ const NumberedMovieCard = ({
           </div>
         </div>
       </div>
+
       <MovieDetailsModal
         movie={{ id, title, poster_path, media_type, release_date, vote_average, ...rest }}
         isOpen={showModal}
