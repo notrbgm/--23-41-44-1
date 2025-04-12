@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";
 import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "@/lib/tmdb";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "./Hero.css";
-
 
 const Hero = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0); // Track current movie index
+  const [isPaused, setIsPaused] = useState(false); // Pause auto-slide
+  const autoSlideRef = useRef(null); // Reference for auto-slide interval
 
   // Fetch trending movies using React Query
   const { data: trending } = useQuery({
@@ -31,6 +31,7 @@ const Hero = () => {
     setCurrentMovieIndex((prevIndex) =>
       prevIndex === trending.length - 1 ? 0 : prevIndex + 1
     );
+    pauseAutoSlide(); // Pause auto-slide for 8 seconds
   };
 
   // Navigate to the previous movie
@@ -38,14 +39,36 @@ const Hero = () => {
     setCurrentMovieIndex((prevIndex) =>
       prevIndex === 0 ? trending.length - 1 : prevIndex - 1
     );
+    pauseAutoSlide(); // Pause auto-slide for 8 seconds
   };
+
+  // Pause auto-slide for 8 seconds
+  const pauseAutoSlide = () => {
+    setIsPaused(true);
+    clearTimeout(autoSlideRef.current);
+    autoSlideRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 8000); // Resume after 8 seconds
+  };
+
+  // Auto-slide movies every 5 seconds
+  useEffect(() => {
+    if (!isPaused) {
+      const interval = setInterval(() => {
+        handleNext();
+      }, 5000); // Change movie every 5 seconds
+
+      return () => clearInterval(interval); // Cleanup on unmount
+    }
+    return undefined;
+  }, [isPaused]);
 
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group"> {/* Adjusted height and bottom margin */}
       <TransitionGroup className="absolute inset-0">
         <CSSTransition
           key={movie.id}
-          timeout={500}
+          timeout={700} // Smoother animation duration
           classNames="slide"
         >
           <div className="absolute inset-0">
@@ -106,17 +129,17 @@ const Hero = () => {
       {/* Navigation Buttons */}
       <button
         onClick={handlePrevious}
-        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.1]"
+        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-4 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
         aria-label="Previous Movie"
       >
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-8 h-8" /> {/* Increased size */}
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.1]"
+        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-4 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
         aria-label="Next Movie"
       >
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-8 h-8" /> {/* Increased size */}
       </button>
 
       {/* Movie Details Modal */}
