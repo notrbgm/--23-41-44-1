@@ -22,6 +22,7 @@ const Hero: React.FC = () => {
 
   const trendingLength = trending?.length || 0; // Use a stable local variable
 
+  // Handle Next Button Click
   const handleNext = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
       prevIndex === trendingLength - 1 ? 0 : prevIndex + 1
@@ -29,6 +30,7 @@ const Hero: React.FC = () => {
     pauseAutoSlide();
   }, [trendingLength]);
 
+  // Handle Previous Button Click
   const handlePrevious = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
       prevIndex === 0 ? trendingLength - 1 : prevIndex - 1
@@ -36,22 +38,24 @@ const Hero: React.FC = () => {
     pauseAutoSlide();
   }, [trendingLength]);
 
+  // Pause Auto-Slide for Manual Interaction
   const pauseAutoSlide = useCallback(() => {
     setIsPaused(true);
     if (autoSlideTimeout.current) clearTimeout(autoSlideTimeout.current);
     autoSlideTimeout.current = setTimeout(() => {
       setIsPaused(false);
-    }, 8000);
+    }, 8000); // Pause for 8 seconds
   }, []);
 
+  // Auto-Slide Logic
   useEffect(() => {
-    if (isPaused || !trending) return; // Ensure trending is available
+    if (isPaused || !trending) return;
 
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup on unmount
   }, [isPaused, handleNext, trending]);
 
   if (!trending || trending.length === 0) {
@@ -62,6 +66,7 @@ const Hero: React.FC = () => {
 
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
+      {/* Slide Animation */}
       <TransitionGroup className="absolute inset-0">
         <CSSTransition key={movie.id} timeout={700} classNames="slide">
           <div className="absolute inset-0">
@@ -121,35 +126,4 @@ const Hero: React.FC = () => {
       <button
         onClick={handleNext}
         className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-[14px] rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
-        aria-label="Next Movie"
-      >
-        <ChevronRight className="w-[32px] h-[32px]" />
-      </button>
-
-      {/* Dots Indicator */}
-      <div className="absolute bottom-[10px] left-[50%] transform -translate-x-[50%] flex gap-[8px]">
-        {trending.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentMovieIndex(index)} // Navigate to the selected movie
-            className={`w-[10px] h-[10px] rounded-full ${
-              index === currentMovieIndex ? "bg-white" : "bg-gray-400"
-            } transition duration-300`}
-            aria-label={`Go to movie ${index + 1}`}
-          ></button>
-        ))}
-      </div>
-
-      {/* Movie Details Modal */}
-      {selectedMovie && (
-        <MovieDetailsModal
-          movie={selectedMovie}
-          isOpen={!!selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-        />
-      )}
-    </div>
-  );
-};
-
-export default Hero;
+        aria-label="Next Movi
