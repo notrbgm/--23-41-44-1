@@ -136,8 +136,8 @@ const Hero: React.FC = () => {
           const dotIndex =
             currentMovieIndex <= 2
               ? i // If near start, show first few movies
-              : currentMovieIndex >= trendingLength - Math.ceil(6 / 2)
-              ? trendingLength - Math.min(6, trendingLength) + i // If near end, show last few movies
+              : currentMovieIndex >= trendingLength - 3
+              ? trendingLength - 6 + i // If near end, show last few movies
               : currentMovieIndex - Math.floor(6 / 2) + i; // Otherwise center around current index
 
           return (
