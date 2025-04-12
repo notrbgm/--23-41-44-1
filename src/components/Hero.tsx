@@ -63,7 +63,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-0.6 group"> {/* Reduced height */}
+<div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-[0.6rem] group"> {/* Reduced height */}}
       {/* Backdrop Image */}
       <div className="absolute inset-0">
         <div className="aspect-video">
