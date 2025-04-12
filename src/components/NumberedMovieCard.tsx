@@ -40,33 +40,28 @@ const NumberedMovieCard = ({
   };
 
   const year = release_date ? new Date(release_date).getFullYear() : null;
-  const rating = vote_average ? Number((vote_average).toFixed(1)) : null;
+  const rating = vote_average ? Number(vote_average.toFixed(1)) : null;
 
   useEffect(() => {
     if (index === 9) {
-      // Target the span containing the number
       const spanElement = document.querySelector(`.numbered-card-${index} span`);
-
       if (spanElement) {
-        // Get the text content of the span
         const text = spanElement.textContent;
 
-        // Clear the span's content
-        spanElement.textContent = '';
+        spanElement.textContent = "";
 
-        // Create the '1' and '0' elements
-        const oneElement = document.createElement('span');
-        oneElement.textContent = '1';
-        oneElement.style.position = 'relative';
+        const oneElement = document.createElement("span");
+        oneElement.textContent = "1";
+        oneElement.style.position = "relative";
 
-        const zeroElement = document.createElement('span');
-        zeroElement.textContent = '0';
-        zeroElement.style.position = 'relative';
-        zeroElement.style.left = '-0.27em'; // Adjust the overlap here
+        const zeroElement = document.createElement("span");
+        zeroElement.textContent = "0";
+        zeroElement.style.position = "relative";
+        zeroElement.style.left = "-0.27em";
 
-                spanElement.style.position = 'relative';
-                spanElement.style.left = '24%';
-        // Append the elements to the span
+        spanElement.style.position = "relative";
+        spanElement.style.left = "24%";
+
         spanElement.appendChild(oneElement);
         spanElement.appendChild(zeroElement);
       }
@@ -80,36 +75,51 @@ const NumberedMovieCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Aligned Number with Dark Mode Support */}
+        {/* Aligned Number with Gradient Outline */}
         <div
-          className={`absolute inset-0 flex items-end justify-end cursor-pointer numbered-card-${index}`} // Added cursor-pointer and numbered-card class
+          className={`absolute inset-0 flex items-end justify-end cursor-pointer numbered-card-${index}`}
           style={{
-            right: "44%", // NUMBER HORIZONTAL POSITION
-            bottom: "-4%", // NUMBER VERTICAL POSITION
+            right: "44%",
+            bottom: "-4%",
           }}
-          onClick={handleCardClick} // Make the number container clickable
+          onClick={handleCardClick}
         >
           <span
             className={`text-[77px] sm:text-[117px] font-black leading-none transition-all duration-300 ${
               isHovered ? "scale-100" : "scale-90"
-            }`}
+            } relative`}
             style={{
-              color: isHovered ? "#DC2626" : "rgba(51, 51, 51, 0.8)", // Change color on hover
-              WebkitTextStroke: "2px #DC2626",
-              textShadow: "0 0 8px #DC2626",
-              userSelect: "none", // Prevent text selection
-              position: 'relative', // Enable absolute positioning of the '0'
+              color: isHovered ? "#DC2626" : "rgba(51, 51, 51, 0.8)",
+              textShadow: isHovered ? "0px 0px 8px rgba(220,38,38,0.8)" : "none",
+              userSelect: "none",
             }}
           >
             {index + 1}
+            {/* Gradient Outline */}
+            <span
+              className="absolute inset-0"
+              style={{
+                backgroundImage: isHovered
+                  ? "linear-gradient(to left, #DC2626, #FF4D4D)" // Gradient effect
+                  : "linear-gradient(to left, rgba(51,51,51,0.8), rgba(51,51,51,0.6))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                zIndex: "-1",
+                textShadow: "none",
+                transform: "scale(1.2)", // Scale up the outline by ~20%
+                transformOrigin: "center", // Ensure scaling happens from the center
+              }}
+            >
+              {index + 1}
+            </span>
           </span>
         </div>
 
-        {/* Movie Poster - Animation Disabled */}
+        {/* Movie Poster */}
         <div className="relative z-10 ml-auto w-[56%]">
           <div
             onClick={handleCardClick}
-            className="cursor-pointer overflow-hidden rounded-lg" // Removed transition-transform and hover:scale-105
+            className="cursor-pointer overflow-hidden rounded-lg"
           >
             <Image
               src={imageUrl}
