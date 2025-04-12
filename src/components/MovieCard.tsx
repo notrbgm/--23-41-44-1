@@ -45,7 +45,7 @@ const MovieCard = ({
       {/* Card Container */}
       <button
         onClick={handleCardClick}
-        className={`movie-card relative rounded-lg overflow-hidden cursor-pointer group shadow-lg hover:shadow-2xl transform hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${className}`}
+        className={`movie-card relative rounded-lg overflow-hidden cursor-pointer group shadow-lg hover:shadow-2xl transform hover:scale-104 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${className}`}
         aria-label={`View details about ${title}`}
       >
         {/* Movie Poster */}
