@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Play, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";
@@ -7,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "@/lib/tmdb";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
-import './Hero.css'; // Importing Hero.css
+import "./Hero.css"; // Importing Hero.css
 
 const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -61,29 +60,19 @@ const Hero: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const movie = limitedMovies[currentMovieIndex];
-
-  // Animation variants for sliding effect
-  const slideVariants = {
-    enter: { x: "100%", opacity: 0 },
-    center: { x: "0%", opacity: 1 },
-    exit: { x: "-100%", opacity: 0 },
-  };
-
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
-      <AnimatePresence>
-        <motion.div
+      {/* Movie Slides */}
+      {limitedMovies.map((movie, index) => (
+        <div
           key={movie.id}
-          variants={slideVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-          className="absolute inset-0"
+          className={`absolute inset-0 ${
+            index === currentMovieIndex
+              ? "slide-enter-active"
+              : index < currentMovieIndex
+              ? "slide-exit-active"
+              : "slide-enter"
+          }`}
         >
           <div className="aspect-video">
             <Image
@@ -96,31 +85,35 @@ const Hero: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
           <div className="absolute inset-0 hero-gradient" />
-        </motion.div>
-      </AnimatePresence>
+        </div>
+      ))}
 
       {/* Movie Details */}
       <div className="relative h-full flex items-center -translate-y-4">
         <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
-            {movie.title || movie.name}
+            {limitedMovies[currentMovieIndex]?.title || "Untitled"}
           </h1>
           <p className="text-xs sm:text-sm md:text-lg text-gray-200 line-clamp-2 md:line-clamp-3 animate-fade-in">
-            {movie.overview}
+            {limitedMovies[currentMovieIndex]?.overview || ""}
           </p>
           <div className="flex gap-2 md:gap-3">
             <Link
-              to={`/${movie.media_type || "movie"}/${movie.id}/watch`}
+              to={`/${limitedMovies[currentMovieIndex]?.media_type || "movie"}/${
+                limitedMovies[currentMovieIndex]?.id
+              }/watch`}
               className="flex items-center gap-1 md:gap-2 bg-white text-black px-2 md:px-8 py-1 md:py-3 rounded text-xs md:text-base hover:bg-gray-300 transition font-medium animate-fade-in"
-              aria-label={`Play ${movie.title || movie.name}`}
+              aria-label={`Play ${limitedMovies[currentMovieIndex]?.title || "Untitled"}`}
             >
               <Play className="w-3 h-3 md:w-6 md:h-6 fill-current" />
               Play
             </Link>
             <button
-              onClick={() => setSelectedMovie(movie)}
+              onClick={() => setSelectedMovie(limitedMovies[currentMovieIndex])}
               className="flex items-center gap-1 md:gap-2 bg-gray-500/70 text-white px-2 md:px-8 py-1 md:py-3 rounded text-xs md:text-base hover:bg-gray-500/50 transition font-medium animate-fade-in"
-              aria-label={`More information about ${movie.title || movie.name}`}
+              aria-label={`More information about ${
+                limitedMovies[currentMovieIndex]?.title || "Untitled"
+              }`}
             >
               <Info className="w-3 h-3 md:w-6 md:h-6" />
               More Info
@@ -132,7 +125,7 @@ const Hero: React.FC = () => {
       {/* Dots Indicator */}
       <div
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
-        style={{ bottom: '20%' }}
+        style={{ bottom: "25%" }}
       >
         {limitedMovies.map((_, index) => (
           <button
