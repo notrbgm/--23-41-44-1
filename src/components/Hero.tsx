@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'; // Importing hooks
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 import { Play, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";
@@ -6,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "@/lib/tmdb";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import './Hero.css'; // Importing Hero.css
 
 const Hero: React.FC = () => {
@@ -63,25 +63,41 @@ const Hero: React.FC = () => {
 
   const movie = limitedMovies[currentMovieIndex];
 
+  // Animation variants for sliding effect
+  const slideVariants = {
+    enter: { x: "100%", opacity: 0 },
+    center: { x: "0%", opacity: 1 },
+    exit: { x: "-100%", opacity: 0 },
+  };
+
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
-      <TransitionGroup className="absolute inset-0">
-        <CSSTransition key={movie.id} timeout={700} classNames="slide">
-          <div className="absolute inset-0">
-            <div className="aspect-video">
-              <Image
-                src={getImageUrl(movie.backdrop_path || "/placeholder.jpg", "original")}
-                alt={movie.title || movie.name}
-                className="w-full h-full object-cover"
-                priority={true}
-              />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
-            <div className="absolute inset-0 hero-gradient" />
+      <AnimatePresence>
+        <motion.div
+          key={movie.id}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          className="absolute inset-0"
+        >
+          <div className="aspect-video">
+            <Image
+              src={getImageUrl(movie.backdrop_path || "/placeholder.jpg", "original")}
+              alt={movie.title || movie.name}
+              className="w-full h-full object-cover"
+              priority={true}
+            />
           </div>
-        </CSSTransition>
-      </TransitionGroup>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
+          <div className="absolute inset-0 hero-gradient" />
+        </motion.div>
+      </AnimatePresence>
 
       {/* Movie Details */}
       <div className="relative h-full flex items-center -translate-y-4">
@@ -116,7 +132,7 @@ const Hero: React.FC = () => {
       {/* Dots Indicator */}
       <div
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
-        style={{ bottom: '25%' }} // Adjusted bottom position
+        style={{ bottom: '20%' }}
       >
         {limitedMovies.map((_, index) => (
           <button
