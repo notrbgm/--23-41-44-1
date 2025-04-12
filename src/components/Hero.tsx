@@ -1,14 +1,3 @@
-import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
-import { getImageUrl } from "@/lib/tmdb";
-import { useQuery } from "@tanstack/react-query";
-import { getTrending } from "@/lib/tmdb";
-import { useState, useEffect, useCallback, useRef } from "react";
-import MovieDetailsModal from "./MovieDetailsModal";
-import { Image } from "./ui/image";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import './Hero.css'; // Importing Hero.css
-
 const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [currentMovieIndex, setCurrentMovieIndex] = useState<number>(0);
@@ -21,21 +10,23 @@ const Hero: React.FC = () => {
     refetchInterval: 1000 * 60 * 60,
   });
 
-  const trendingLength = trending?.length || 0;
+  // Limit the movies to only the first 6
+  const limitedMovies = trending?.slice(0, 6) || [];
+  const limitedMoviesLength = limitedMovies.length;
 
   const handleNext = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === trendingLength - 1 ? 0 : prevIndex + 1
+      prevIndex === limitedMoviesLength - 1 ? 0 : prevIndex + 1
     );
     pauseAutoSlide();
-  }, [trendingLength]);
+  }, [limitedMoviesLength]);
 
   const handlePrevious = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === 0 ? trendingLength - 1 : prevIndex - 1
+      prevIndex === 0 ? limitedMoviesLength - 1 : prevIndex - 1
     );
     pauseAutoSlide();
-  }, [trendingLength]);
+  }, [limitedMoviesLength]);
 
   const pauseAutoSlide = useCallback(() => {
     setIsPaused(true);
@@ -46,20 +37,20 @@ const Hero: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isPaused || !trending) return;
+    if (isPaused || !limitedMovies) return;
 
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [isPaused, handleNext, trending]);
+  }, [isPaused, handleNext, limitedMovies]);
 
-  if (!trending || trending.length === 0) {
+  if (!limitedMovies || limitedMovies.length === 0) {
     return <div>Loading...</div>;
   }
 
-  const movie = trending[currentMovieIndex];
+  const movie = limitedMovies[currentMovieIndex];
 
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
@@ -132,25 +123,16 @@ const Hero: React.FC = () => {
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
         style={{ bottom: '8%' }}
       >
-        {Array.from({ length: Math.min(6, trendingLength) }, (_, i) => {
-          const dotIndex =
-            currentMovieIndex <= 2
-              ? i // If near start, show first few movies
-              : currentMovieIndex >= trendingLength - 3
-              ? trendingLength - 6 + i // If near end, show last few movies
-              : currentMovieIndex - Math.floor(6 / 2) + i; // Otherwise center around current index
-
-          return (
-            <button
-              key={dotIndex}
-              onClick={() => setCurrentMovieIndex(dotIndex)}
-              className={`w-[10px] h-[10px] rounded-full ${
-                dotIndex === currentMovieIndex ? "bg-white" : "bg-gray-400"
-              } transition duration-300`}
-              aria-label={`Go to movie ${dotIndex + 1}`}
-            ></button>
-          );
-        })}
+        {limitedMovies.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentMovieIndex(index)}
+            className={`w-[10px] h-[10px] rounded-full ${
+              index === currentMovieIndex ? "bg-white" : "bg-gray-400"
+            } transition duration-300`}
+            aria-label={`Go to movie ${index + 1}`}
+          ></button>
+        ))}
       </div>
 
       {/* Movie Details Modal */}
