@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
       handleNext();
     }, 5000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup on unmount
   }, [isPaused, handleNext, trending]);
 
   if (!trending || trending.length === 0) {
@@ -127,7 +127,7 @@ const Hero: React.FC = () => {
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-[10px] left-[50%] transform -translate-x-[50%] flex gap-[8px]">
+      <div className="absolute bottom-[6%] left-[50%] transform -translate-x-[50%] flex gap-[8px]">
         {trending.map((_, index) => (
           <button
             key={index}
