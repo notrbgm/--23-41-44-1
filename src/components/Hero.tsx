@@ -131,33 +131,5 @@ const Hero: React.FC = () => {
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
         style={{ bottom: '8%' }}
       >
-        {trending
-          .slice(
-            Math.max(0, currentMovieIndex - Math.floor(6 / 2)), // Start slicing dynamically based on current index
-            Math.min(trending.length, currentMovieIndex + Math.ceil(6 / 2)) // End slicing dynamically based on current index
-          )
-          .map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentMovieIndex(index)}
-              className={`w-[10px] h-[10px] rounded-full ${
-                index === currentMovieIndex ? "bg-white" : "bg-gray-400"
-              } transition duration-300`}
-              aria-label={`Go to movie ${index + 1}`}
-            ></button>
-          ))}
-      </div>
-
-      {/* Movie Details Modal */}
-      {selectedMovie && (
-        <MovieDetailsModal
-          movie={selectedMovie}
-          isOpen={!!selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-        />
-      )}
-    </div>
-  );
-};
-
-export default Hero;
+        {trending.slice(
+          currentMovieIndex <= Math.floor(6 /
