@@ -132,29 +132,25 @@ const Hero: React.FC = () => {
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
         style={{ bottom: '8%' }}
       >
-        {trending
-          .slice(
-            currentMovieIndex <= Math.floor(6 / 2) // Handle case when near start
-              ? 0
-              : currentMovieIndex >= trending.length - Math.ceil(6 / 2) // Handle case when near end
-              ? trending.length - Math.min(6, trending.length)
-              : currentMovieIndex - Math.floor(6 / 2), // Normal case: centered around current index
-            currentMovieIndex <= Math.floor(6 / 2) // Handle case when near start
-              ? Math.min(6, trending.length)
-              : currentMovieIndex >= trending.length - Math.ceil(6 / 2) // Handle case when near end
-              ? trending.length
-              : currentMovieIndex + Math.ceil(6 / 2) // Normal case: centered around current index
-          )
-          .map((_, index) => (
+        {Array.from({ length: Math.min(6, trendingLength) }, (_, i) => {
+          const dotIndex =
+            currentMovieIndex <= 2
+              ? i // If near start, show first few movies
+              : currentMovieIndex >= trendingLength - Math.ceil(6 / 2)
+              ? trendingLength - Math.min(6, trendingLength) + i // If near end, show last few movies
+              : currentMovieIndex - Math.floor(6 / 2) + i; // Otherwise center around current index
+
+          return (
             <button
-              key={index}
-              onClick={() => setCurrentMovieIndex(index)}
+              key={dotIndex}
+              onClick={() => setCurrentMovieIndex(dotIndex)}
               className={`w-[10px] h-[10px] rounded-full ${
-                index === currentMovieIndex ? "bg-white" : "bg-gray-400"
+                dotIndex === currentMovieIndex ? "bg-white" : "bg-gray-400"
               } transition duration-300`}
-              aria-label={`Go to movie ${index + 1}`}
+              aria-label={`Go to movie ${dotIndex + 1}`}
             ></button>
-          ))}
+          );
+        })}
       </div>
 
       {/* Movie Details Modal */}
