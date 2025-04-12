@@ -63,7 +63,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[56.25vw] lg:h-[65vw] xl:h-[70vw] w-full mb-8">
+    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[50vw] lg:h-[60vw] xl:h-[65vw] w-full mb-4"> {/* Reduced height */}
       {/* Backdrop Image */}
       <div className="absolute inset-0">
         <div className="aspect-video">
@@ -80,7 +80,7 @@ const Hero = () => {
       </div>
 
       {/* Movie Details */}
-      <div className="relative h-full flex items-center">
+      <div className="relative h-full flex items-center -translate-y-4"> {/* Move content up */}
         <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
           {/* Title */}
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
