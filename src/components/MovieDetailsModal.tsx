@@ -25,14 +25,12 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
   const queryClient = useQueryClient();
   const [isInList, setIsInList] = useState(false);
 
-  // Check if movie is in the list
   useEffect(() => {
     if (movie) {
       setIsInList(isInMyList(movie.id));
     }
   }, [movie]);
 
-  // Fetch similar movies
   const { data: similarMovies, isLoading: loadingSimilar, error: similarError } = useQuery({
     queryKey: ["similar", movie.id],
     queryFn: () => getSimilarMovies(movie.id.toString()),
@@ -40,7 +38,6 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
     retry: false // Do not retry on error
   });
 
-  // Fetch recommendations
   const { data: recommendations, isLoading: loadingRecommendations, error: recommendationsError } = useQuery({
     queryKey: ["recommendations", movie.id],
     queryFn: () => getRecommendations(movie.id.toString()),
@@ -48,7 +45,6 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
     retry: false // Do not retry on error
   });
 
-  // Handle adding movie to list
   const handleAddToList = useCallback(async () => {
     try {
       await addToList("myList", movie.id, movie.media_type || "movie");
@@ -60,7 +56,6 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
     }
   }, [movie, queryClient]);
 
-  // Handle removing movie from list
   const handleRemoveFromList = useCallback(async () => {
     try {
       await removeFromList("myList", movie.id, movie.media_type || "movie");
@@ -72,18 +67,15 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
     }
   }, [movie, queryClient]);
 
-  // Handle liking a movie
   const handleLike = useCallback(() => {
     toast.success("Added to your liked titles");
   }, []);
 
-  // Handle category click
   const handleCategoryClick = useCallback((category: string) => {
     onClose();
     navigate(`/category/${category.toLowerCase()}`);
   }, [navigate, onClose]);
 
-  // Handle movie click
   const handleMovieClick = useCallback((selectedMovie: any) => {
     onClose();
     setTimeout(() => {
@@ -91,7 +83,6 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
     }, 100);
   }, [navigate, onClose]);
 
-  // Memoize categories
   const categories = useMemo(() => {
     return [
       movie.media_type?.toUpperCase() || "MOVIE",
@@ -106,7 +97,6 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
     ];
   }, [movie]);
 
-  // Memoize valid image URL
   const getValidImage = useCallback((movie: any) =>
     getImageUrl(movie.backdrop_path || movie.poster_path || "/placeholder.jpg", "original"), [movie]);
 
@@ -114,7 +104,7 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl p-0 bg-netflix-black text-white overflow-y-auto max-h-[90vh] w-[95vw] sm:w-[85vw] md:w-[90vw]">
+      <DialogContent className="max-w-4xl p-0 bg-netflix-black text-white overflow-y-auto max-h-[90vh] w-[95vw] sm:w-[85vw] md:w-[90vw] scrollbar-hide">
         <div className="relative">
           <img
             src={getValidImage(movie)}
@@ -255,4 +245,3 @@ const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) =
 };
 
 export default MovieDetailsModal;
-
