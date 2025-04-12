@@ -1,57 +1,138 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import CategoryRow from "@/components/CategoryRow";
+import TopTenRow from "@/components/TopTenRow";
+import Footer from "@/components/Footer";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
+import {
+  getPopular,
+  getNewReleases,
+  getMoviesByGenre,
+  getKDramas,
+  getTVShows,
+  getTrending,
+  type Movie,
+  type MovieResponse,
+} from "@/lib/tmdb";
 
-const TopTenHeader = () => {
+const GENRE_IDS = {
+  horror: "27",
+  scifi: "878",
+  animation: "16",
+  thriller: "53",
+  romance: "10749",
+  action: "28",
+  comedy: "35",
+  drama: "18"
+};
+
+const Index = () => {
+  const { data: popularMovies } = useQuery<Movie[]>({
+    queryKey: ["popular"],
+    queryFn: async () => {
+      const response = await getPopular();
+      return response.results;
+    },
+  });
+
+  const { data: newReleases } = useQuery<Movie[]>({
+    queryKey: ["new-releases"],
+    queryFn: getNewReleases,
+  });
+
+  const { data: kdramas } = useQuery<Movie[]>({
+    queryKey: ["kdramas"],
+    queryFn: getKDramas,
+  });
+
+  const { data: tvShows } = useQuery<Movie[]>({
+    queryKey: ["tvshows"],
+    queryFn: async () => {
+      const response = await getTVShows();
+      return response.results;
+    },
+  });
+
+  const { data: trending } = useQuery<Movie[]>({
+    queryKey: ["trending"],
+    queryFn: getTrending,
+  });
+
+  // Genre-specific queries
+  const { data: horrorMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.horror],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.horror),
+  });
+
+  const { data: actionMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.action],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.action),
+  });
+
+  const { data: scifiMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.scifi],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.scifi),
+  });
+
+  const { data: animationMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.animation],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.animation),
+  });
+
+  const { data: thrillerMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.thriller],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.thriller),
+  });
+
+  const { data: romanceMovies } = useQuery<MovieResponse>({
+    queryKey: ["genre", GENRE_IDS.romance],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
+  });
+
   return (
-    <div className="group relative mb-6 flex items-center">
-      {/* Main Title */}
-      <div className="flex items-baseline">
-        <span className="text-3xl font-bold text-white">Top</span>
-        
-        {/* Styled "10" with overlapping digits */}
-        <div className="relative mx-2">
-          {/* Digit "1" */}
-          <span 
-            className="text-[40px] font-black leading-none text-gray-800/80 transition-colors duration-300 
-                       group-hover:text-red-600"
-            style={{
-              WebkitTextStroke: "2px #DC2626",
-              textShadow: "0 0 8px #DC2626",
-              position: "relative",
-              zIndex: 10,
-            }}
-          >
-            1
-          </span>
-          
-          {/* Digit "0" - overlapped */}
-          <span 
-            className="text-[40px] font-black leading-none text-gray-800/80 transition-colors duration-300 
-                       group-hover:text-red-600"
-            style={{
-              WebkitTextStroke: "2px #DC2626",
-              textShadow: "0 0 8px #DC2626",
-              position: "relative",
-              left: "-0.35em", // Adjust this for perfect overlap
-            }}
-          >
-            0
-          </span>
-        </div>
-
-        <span className="text-3xl font-bold text-white">Today</span>
+    <div className="min-h-screen bg-netflix-black">
+      <Navbar />
+      <AnnouncementBanner />
+      <Hero />
+      <div className="space-y-8 pb-8">
+        {trending && trending.length > 0 && (
+          <TopTenRow title="Top 10 Today" movies={trending} />
+        )}
+        {popularMovies && popularMovies.length > 0 && (
+          <CategoryRow title="Popular Movies" movies={popularMovies} />
+        )}
+        {newReleases && newReleases.length > 0 && (
+          <CategoryRow title="New Releases" movies={newReleases} />
+        )}
+        {kdramas && kdramas.length > 0 && (
+          <CategoryRow title="K-Dramas" movies={kdramas} />
+        )}
+        {tvShows && tvShows.length > 0 && (
+          <CategoryRow title="TV Shows" movies={tvShows} />
+        )}
+        {horrorMovies?.results && horrorMovies.results.length > 0 && (
+          <CategoryRow title="Horror" movies={horrorMovies.results} />
+        )}
+        {actionMovies?.results && actionMovies.results.length > 0 && (
+          <CategoryRow title="Action & Adventure" movies={actionMovies.results} />
+        )}
+        {scifiMovies?.results && scifiMovies.results.length > 0 && (
+          <CategoryRow title="Sci-Fi & Fantasy" movies={scifiMovies.results} />
+        )}
+        {animationMovies?.results && animationMovies.results.length > 0 && (
+          <CategoryRow title="Animation" movies={animationMovies.results} />
+        )}
+        {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
+          <CategoryRow title="Thriller" movies={thrillerMovies.results} />
+        )}
+        {romanceMovies?.results && romanceMovies.results.length > 0 && (
+          <CategoryRow title="Romance" movies={romanceMovies.results} />
+        )}
       </div>
-
-      {/* Optional: Add the red glow effect on hover */}
-      <div className="absolute inset-0 -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <div 
-          className="absolute inset-0 blur-sm"
-          style={{
-            background: "radial-gradient(circle, rgba(220,38,38,0.3) 0%, transparent 70%)",
-          }}
-        />
-      </div>
+      <Footer />
     </div>
   );
 };
 
-export default TopTenHeader;
+export default Index;
