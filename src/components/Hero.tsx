@@ -127,7 +127,10 @@ const Hero: React.FC = () => {
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-[6%] left-[50%] transform -translate-x-[50%] flex gap-[8px]">
+      <div
+        className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
+        style={{ bottom: '8%' }} // Inline style to move dots up by approximately 8%
+      >
         {trending.map((_, index) => (
           <button
             key={index}
