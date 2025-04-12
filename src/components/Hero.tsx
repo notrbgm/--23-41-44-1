@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";
 import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "@/lib/tmdb";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -11,6 +11,8 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 const Hero = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0); // Track current movie index
+  const [isPaused, setIsPaused] = useState(false); // Pause auto-slide when user interacts
+  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch trending movies using React Query
   const { data: trending } = useQuery({
@@ -29,6 +31,7 @@ const Hero = () => {
     setCurrentMovieIndex((prevIndex) =>
       prevIndex === trending.length - 1 ? 0 : prevIndex + 1
     );
+    pauseAutoSlide();
   };
 
   // Navigate to the previous movie
@@ -36,16 +39,34 @@ const Hero = () => {
     setCurrentMovieIndex((prevIndex) =>
       prevIndex === 0 ? trending.length - 1 : prevIndex - 1
     );
+    pauseAutoSlide();
   };
 
+  // Pause auto-slide for a specific duration (8 seconds)
+  const pauseAutoSlide = () => {
+    setIsPaused(true);
+    if (autoSlideTimeout.current) clearTimeout(autoSlideTimeout.current);
+    autoSlideTimeout.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 8000); // Pause for 8 seconds
+  };
+
+  // Auto-slide every 5 seconds
+  useEffect(() => {
+    if (isPaused) return; // Skip auto-slide when paused
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [isPaused]);
+
   return (
-    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group"> {/* Adjusted height and bottom margin */}
+    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
+      {/* Slide Animation */}
       <TransitionGroup className="absolute inset-0">
-        <CSSTransition
-          key={movie.id}
-          timeout={500}
-          classNames="slide"
-        >
+        <CSSTransition key={movie.id} timeout={700} classNames="slide">
           <div className="absolute inset-0">
             <div className="aspect-video">
               <Image
@@ -64,7 +85,7 @@ const Hero = () => {
       </TransitionGroup>
 
       {/* Movie Details */}
-      <div className="relative h-full flex items-center -translate-y-4"> {/* Moved content upward */}
+      <div className="relative h-full flex items-center -translate-y-4">
         <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
           {/* Title */}
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
@@ -104,17 +125,17 @@ const Hero = () => {
       {/* Navigation Buttons */}
       <button
         onClick={handlePrevious}
-        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.1]"
+        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-[14px] rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
         aria-label="Previous Movie"
       >
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-[32px] h-[32px]" />
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.1]"
+        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-[14px] rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
         aria-label="Next Movie"
       >
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-[32px] h-[32px]" />
       </button>
 
       {/* Movie Details Modal */}
