@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Importing useState and other hooks
+import React, { useState, useEffect, useCallback, useRef } from 'react'; // Importing useRef
 import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";
@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [currentMovieIndex, setCurrentMovieIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null);
+  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null); // Using useRef
 
   const { data: trending } = useQuery({
     queryKey: ["trending"],
