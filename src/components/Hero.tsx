@@ -38,7 +38,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-4 group"> {/* Adjusted height and bottom margin */}
+    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group"> {/* Adjusted height and bottom margin */}
       {/* Backdrop Image */}
       <div className="absolute inset-0">
         <div className="aspect-video">
@@ -50,7 +50,7 @@ const Hero = () => {
           />
         </div>
         {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" /> {/* Bottom fade */}
         <div className="absolute inset-0 hero-gradient" />
       </div>
 
@@ -95,14 +95,14 @@ const Hero = () => {
       {/* Navigation Buttons */}
       <button
         onClick={handlePrevious}
-        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300"
+        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.1]"
         aria-label="Previous Movie"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300"
+        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-2 rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.1]"
         aria-label="Next Movie"
       >
         <ChevronRight className="w-6 h-6" />
