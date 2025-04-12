@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import './Hero.css'; // Importing Hero.css
 
 const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -131,5 +132,41 @@ const Hero: React.FC = () => {
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
         style={{ bottom: '8%' }}
       >
-        {trending.slice(
-          currentMovieIndex <= Math.floor(6 /
+        {trending
+          .slice(
+            currentMovieIndex <= Math.floor(6 / 2) // Handle case when near start
+              ? 0
+              : currentMovieIndex >= trending.length - Math.ceil(6 / 2) // Handle case when near end
+              ? trending.length - Math.min(6, trending.length)
+              : currentMovieIndex - Math.floor(6 / 2), // Normal case: centered around current index
+            currentMovieIndex <= Math.floor(6 / 2) // Handle case when near start
+              ? Math.min(6, trending.length)
+              : currentMovieIndex >= trending.length - Math.ceil(6 / 2) // Handle case when near end
+              ? trending.length
+              : currentMovieIndex + Math.ceil(6 / 2) // Normal case: centered around current index
+          )
+          .map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentMovieIndex(index)}
+              className={`w-[10px] h-[10px] rounded-full ${
+                index === currentMovieIndex ? "bg-white" : "bg-gray-400"
+              } transition duration-300`}
+              aria-label={`Go to movie ${index + 1}`}
+            ></button>
+          ))}
+      </div>
+
+      {/* Movie Details Modal */}
+      {selectedMovie && (
+        <MovieDetailsModal
+          movie={selectedMovie}
+          isOpen={!!selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default Hero;
