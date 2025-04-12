@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";
 import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "@/lib/tmdb";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
 
@@ -30,6 +30,11 @@ const Hero = () => {
     return randomMovie;
   }, [trending]);
 
+  // Reset scroll position on refresh
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (isLoading) {
     return (
       <div className="relative h-[40vh] sm:h-[50vh] md:h-[56.25vw] w-full mb-8 flex items-center justify-center">
@@ -49,7 +54,7 @@ const Hero = () => {
   if (!movie) return null;
 
   return (
-    <div className="relative h-[40vh] sm:h-[50vh] md:h-[56.25vw] lg:h-[65vw] xl:h-[70vw] w-full mb-8">
+    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[56.25vw] lg:h-[65vw] xl:h-[70vw] w-full mb-8">
       <div className="absolute inset-0">
         <div className="aspect-video">
           <Image
@@ -70,18 +75,12 @@ const Hero = () => {
           <p className="text-xs sm:text-sm md:text-lg text-gray-200 line-clamp-2 md:line-clamp-3 animate-fade-in">
             {movie.overview}
           </p>
-          <div className="flex flex-wrap gap-2">
-            {movie.genre_ids?.map((genreId) => (
-              <span key={genreId} className="bg-gray-800 text-white text-xs px-2 py-1 rounded">
-                Genre Name Here
-              </span>
-            ))}
-          </div>
           <div className="flex gap-2 md:gap-3">
             <Link
               to={`/${movie.media_type || "movie"}/${movie.id}/watch`}
               className="flex items-center gap-1 md:gap-2 bg-white text-black px-2 md:px-8 py-1 md:py-3 rounded text-xs md:text-base hover:bg-gray-300 transition font-medium animate-fade-in"
               aria-label={`Play ${movie.title || movie.name}`}
+              tabIndex="-1"
             >
               <Play className="w-3 h-3 md:w-6 md:h-6 fill-current" />
               Play
@@ -90,6 +89,7 @@ const Hero = () => {
               onClick={() => setSelectedMovie(movie)}
               className="flex items-center gap-1 md:gap-2 bg-gray-500/70 text-white px-2 md:px-8 py-1 md:py-3 rounded text-xs md:text-base hover:bg-gray-500/50 transition font-medium animate-fade-in"
               aria-label={`More information about ${movie.title || movie.name}`}
+              tabIndex="-1"
             >
               <Info className="w-3 h-3 md:w-6 md:h-6" />
               More Info
