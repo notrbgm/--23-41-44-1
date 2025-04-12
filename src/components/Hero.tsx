@@ -7,8 +7,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "./Hero.css";
-
 
 const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -33,7 +31,7 @@ const Hero: React.FC = () => {
 
   const handlePrevious = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === 0 ? trendingLength - 1 : prevIndex + 1
+      prevIndex === 0 ? trendingLength - 1 : prevIndex - 1
     );
     pauseAutoSlide();
   }, [trendingLength]);
@@ -127,6 +125,20 @@ const Hero: React.FC = () => {
       >
         <ChevronRight className="w-[32px] h-[32px]" />
       </button>
+
+      {/* Dots Indicator */}
+      <div className="absolute bottom-[10px] left-[50%] transform -translate-x-[50%] flex gap-[8px]">
+        {trending.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentMovieIndex(index)} // Navigate to the selected movie
+            className={`w-[10px] h-[10px] rounded-full ${
+              index === currentMovieIndex ? "bg-white" : "bg-gray-400"
+            } transition duration-300`}
+            aria-label={`Go to movie ${index + 1}`}
+          ></button>
+        ))}
+      </div>
 
       {/* Movie Details Modal */}
       {selectedMovie && (
