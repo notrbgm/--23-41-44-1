@@ -1,231 +1,159 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Play, Plus, ThumbsUp, X } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  getImageUrl,
-  addToList,
-  removeFromList,
-  getSimilarMovies,
-  getRecommendations,
-  isInMyList
-} from "@/lib/tmdb";
-import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useRef } from 'react'; // Importing useRef
+import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { getImageUrl } from "@/lib/tmdb";
+import { useQuery } from "@tanstack/react-query";
+import { getTrending } from "@/lib/tmdb";
+import MovieDetailsModal from "./MovieDetailsModal";
+import { Image } from "./ui/image";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import './Hero.css'; // Importing Hero.css
 
-interface MovieDetailsModalProps {
-  movie: any;
-  isOpen: boolean;
-  onClose: () => void;
-}
+const Hero: React.FC = () => {
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [currentMovieIndex, setCurrentMovieIndex] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null); // Using useRef
 
-const MovieDetailsModal = ({ movie, isOpen, onClose }: MovieDetailsModalProps) => {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const [isInList, setIsInList] = useState(false);
+  const { data: trending } = useQuery({
+    queryKey: ["trending"],
+    queryFn: getTrending,
+    refetchInterval: 1000 * 60 * 60,
+  });
+
+  const trendingLength = trending?.length || 0;
+
+  const handleNext = useCallback(() => {
+    setCurrentMovieIndex((prevIndex) =>
+      prevIndex === trendingLength - 1 ? 0 : prevIndex + 1
+    );
+    pauseAutoSlide();
+  }, [trendingLength]);
+
+  const handlePrevious = useCallback(() => {
+    setCurrentMovieIndex((prevIndex) =>
+      prevIndex === 0 ? trendingLength - 1 : prevIndex - 1
+    );
+    pauseAutoSlide();
+  }, [trendingLength]);
+
+  const pauseAutoSlide = useCallback(() => {
+    setIsPaused(true);
+    if (autoSlideTimeout.current) clearTimeout(autoSlideTimeout.current);
+    autoSlideTimeout.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 8000);
+  }, []);
 
   useEffect(() => {
-    if (movie) {
-      setIsInList(isInMyList(movie.id));
-    }
-  }, [movie]);
+    if (isPaused || !trending) return;
 
-  const { data: similarMovies, isLoading: loadingSimilar } = useQuery({
-    queryKey: ["similar", movie.id],
-    queryFn: () => getSimilarMovies(movie.id.toString()),
-    enabled: isOpen
-  });
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
 
-  const { data: recommendations, isLoading: loadingRecommendations } = useQuery({
-    queryKey: ["recommendations", movie.id],
-    queryFn: () => getRecommendations(movie.id.toString()),
-    enabled: isOpen
-  });
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [isPaused, handleNext, trending]);
 
-  const handleAddToList = async () => {
-    try {
-      await addToList("myList", movie.id, movie.media_type || "movie");
-      setIsInList(true);
-      queryClient.invalidateQueries({ queryKey: ["myList"] });
-      toast.success("Added to My List");
-    } catch (error) {
-      toast.error("Failed to add to list. Please try again.");
-    }
-  };
+  if (!trending || trending.length === 0) {
+    return <div>Loading...</div>;
+  }
 
-  const handleRemoveFromList = async () => {
-    try {
-      await removeFromList("myList", movie.id, movie.media_type || "movie");
-      setIsInList(false);
-      queryClient.invalidateQueries({ queryKey: ["myList"] });
-      toast.success("Removed from My List");
-    } catch (error) {
-      toast.error("Failed to remove from list. Please try again.");
-    }
-  };
-
-  const handleLike = () => {
-    toast.success("Added to your liked titles");
-  };
-
-  const handleCategoryClick = (category: string) => {
-    onClose();
-    navigate(`/category/${category.toLowerCase()}`);
-  };
-
-  const handleMovieClick = (selectedMovie: any) => {
-    onClose();
-    setTimeout(() => {
-      navigate(`/${selectedMovie.media_type || "movie"}/${selectedMovie.id}/watch`);
-    }, 100);
-  };
-
-  if (!movie) return null;
-
-  const mediaType = movie.media_type || "movie";
-
-  const categories = useMemo(() => {
-    return [
-      mediaType.toUpperCase(),
-      "Action",
-      "Comedy",
-      "Horror",
-      "Romance",
-      "Thriller",
-      "Animation",
-      "Drama",
-      "Sci-Fi"
-    ];
-  }, [mediaType]);
-
-  const getValidImage = (movie: any) =>
-    getImageUrl(movie.backdrop_path || movie.poster_path || "/placeholder.jpg", "original");
+  const movie = trending[currentMovieIndex];
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl p-0 bg-netflix-black text-white overflow-y-auto max-h-[90vh] w-[95vw] sm:w-[85vw] md:w-[90vw] scrollbar-hide">
-        <div className="relative">
-          <img
-            src={getValidImage(movie)}
-            alt={movie.title || movie.name || "Movie Poster"}
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-netflix-black" />
-          <div className="absolute bottom-0 left-0 p-4 md:p-6 space-y-2 md:space-y-4 w-full">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold line-clamp-2">{movie.title || movie.name}</h2>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              <Link
-                to={`/${movie.media_type || "movie"}/${movie.id}/watch`}
-                className="flex items-center gap-1 sm:gap-2 bg-white text-black px-3 sm:px-6 py-1.5 sm:py-2 rounded text-sm sm:text-base hover:bg-gray-200 transition"
-              >
-                <Play className="w-4 h-4 sm:w-5 sm:h-5" /> Play
-              </Link>
-              {!isInList ? (
-                <button
-                  onClick={handleAddToList}
-                  className="flex items-center gap-1 sm:gap-2 bg-gray-500/70 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded text-sm sm:text-base hover:bg-gray-500/50 transition"
-                >
-                  <Plus className="w-4 h-4 sm:w-5 sm:h-5" /> My List
-                </button>
-              ) : (
-                <button
-                  onClick={handleRemoveFromList}
-                  className="flex items-center gap-1 sm:gap-2 bg-gray-500/70 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded text-sm sm:text-base hover:bg-gray-500/50 transition"
-                >
-                  <X className="w-4 h-4 sm:w-5 sm:h-5" /> Remove
-                </button>
-              )}
-              <button
-                onClick={handleLike}
-                className="flex items-center gap-1 sm:gap-2 bg-gray-500/70 text-white p-1.5 sm:p-2 rounded-full hover:bg-gray-500/50 transition"
-              >
-                <ThumbsUp className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
+    <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
+      <TransitionGroup className="absolute inset-0">
+        <CSSTransition key={movie.id} timeout={700} classNames="slide">
+          <div className="absolute inset-0">
+            <div className="aspect-video">
+              <Image
+                src={getImageUrl(movie.backdrop_path || "/placeholder.jpg", "original")}
+                alt={movie.title || movie.name}
+                className="w-full h-full object-cover"
+                priority={true}
+              />
             </div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
+            <div className="absolute inset-0 hero-gradient" />
+          </div>
+        </CSSTransition>
+      </TransitionGroup>
+
+      {/* Movie Details */}
+      <div className="relative h-full flex items-center -translate-y-4">
+        <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
+          <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
+            {movie.title || movie.name}
+          </h1>
+          <p className="text-xs sm:text-sm md:text-lg text-gray-200 line-clamp-2 md:line-clamp-3 animate-fade-in">
+            {movie.overview}
+          </p>
+          <div className="flex gap-2 md:gap-3">
+            <Link
+              to={`/${movie.media_type || "movie"}/${movie.id}/watch`}
+              className="flex items-center gap-1 md:gap-2 bg-white text-black px-2 md:px-8 py-1 md:py-3 rounded text-xs md:text-base hover:bg-gray-300 transition font-medium animate-fade-in"
+              aria-label={`Play ${movie.title || movie.name}`}
+            >
+              <Play className="w-3 h-3 md:w-6 md:h-6 fill-current" />
+              Play
+            </Link>
+            <button
+              onClick={() => setSelectedMovie(movie)}
+              className="flex items-center gap-1 md:gap-2 bg-gray-500/70 text-white px-2 md:px-8 py-1 md:py-3 rounded text-xs md:text-base hover:bg-gray-500/50 transition font-medium animate-fade-in"
+              aria-label={`More information about ${movie.title || movie.name}`}
+            >
+              <Info className="w-3 h-3 md:w-6 md:h-6" />
+              More Info
+            </button>
           </div>
         </div>
+      </div>
 
-        <div className="p-4 md:p-6 space-y-6">
-          <div className="space-y-3 md:space-y-4">
-            <div className="flex items-center gap-3 text-xs sm:text-sm">
-              <span className="text-green-500">
-                {Math.round((movie.vote_average || 0) * 10)}% Match
-              </span>
-              <span>{movie.release_date?.split("-")[0]}</span>
-              <span className="border px-1">HD</span>
-            </div>
-            <p className="text-sm sm:text-base text-gray-200">{movie.overview}</p>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <Badge
-                  key={category}
-                  className="cursor-pointer hover:bg-primary/80 text-xs sm:text-sm"
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  {category}
-                </Badge>
-              ))}
-            </div>
-          </div>
+      {/* Navigation Buttons */}
+      <button
+        onClick={handlePrevious}
+        className="absolute left-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-[14px] rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
+        aria-label="Previous Movie"
+      >
+        <ChevronLeft className="w-[32px] h-[32px]" />
+      </button>
+      <button
+        onClick={handleNext}
+        className="absolute right-[4%] top-[50%] transform -translate-y-[50%] bg-gray-800/70 text-white p-[14px] rounded-full opacity-20 group-hover:opacity-80 transition-opacity duration-300 hover:scale-[1.15]"
+        aria-label="Next Movie"
+      >
+        <ChevronRight className="w-[32px] h-[32px]" />
+      </button>
 
-          {loadingSimilar ? (
-            <p>Loading similar titles...</p>
-          ) : (
-            similarMovies && similarMovies.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-lg sm:text-xl font-semibold">Similar Titles</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
-                  {similarMovies.slice(0, 4).map((similar) => (
-                    <div
-                      key={similar.id}
-                      className="space-y-1 sm:space-y-2 cursor-pointer hover:opacity-75 transition-opacity"
-                      onClick={() => handleMovieClick(similar)}
-                    >
-                      <div className="aspect-[2/3] relative rounded-sm overflow-hidden">
-                        <img
-                          src={getImageUrl(similar.poster_path, "w500")}
-                          alt={similar.title || similar.name || "Similar Title"}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p className="text-xs sm:text-sm line-clamp-1">{similar.title || similar.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )
-          )}... {loadingRecommendations ? (
-            <p>Loading recommendations...</p>
-          ) : (
-            recommendations && recommendations.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-lg sm:text-xl font-semibold">Recommended For You</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
-                  {recommendations.slice(0, 4).map((recommendation) => (
-                    <div
-                      key={recommendation.id}
-                      className="space-y-1 sm:space-y-2 cursor-pointer hover:opacity-75 transition-opacity"
-                      onClick={() => handleMovieClick(recommendation)}
-                    >
-                      <div className="aspect-[2/3] relative rounded-sm overflow-hidden">
-                        <img
-                          src={getImageUrl(recommendation.poster_path, "w500")}
-                          alt={recommendation.title || recommendation.name || "Recommended Title"}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p className="text-xs sm:text-sm line-clamp-1">{recommendation.title || recommendation.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+      {/* Dots Indicator */}
+      <div
+        className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
+        style={{ bottom: '8%' }}
+      >
+        {trending.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentMovieIndex(index)}
+            className={`w-[10px] h-[10px] rounded-full ${
+              index === currentMovieIndex ? "bg-white" : "bg-gray-400"
+            } transition duration-300`}
+            aria-label={`Go to movie ${index + 1}`}
+          ></button>
+        ))}
+      </div>
+
+      {/* Movie Details Modal */}
+      {selectedMovie && (
+        <MovieDetailsModal
+          movie={selectedMovie}
+          isOpen={!!selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+        />
+      )}
+    </div>
   );
 };
 
-export default MovieDetailsModal;
+export default Hero;
