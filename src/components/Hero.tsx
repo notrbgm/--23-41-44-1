@@ -7,6 +7,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import "./Hero.css";
+
 
 const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
