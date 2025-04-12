@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [currentMovieIndex, setCurrentMovieIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null); // Using useRef
+  const autoSlideTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const { data: trending } = useQuery({
     queryKey: ["trending"],
@@ -21,21 +21,23 @@ const Hero: React.FC = () => {
     refetchInterval: 1000 * 60 * 60,
   });
 
-  const trendingLength = trending?.length || 0;
+  // Limit movies to the first 6
+  const limitedMovies = trending?.slice(0, 6) || [];
+  const limitedMoviesLength = limitedMovies.length;
 
   const handleNext = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === trendingLength - 1 ? 0 : prevIndex + 1
+      prevIndex === limitedMoviesLength - 1 ? 0 : prevIndex + 1
     );
     pauseAutoSlide();
-  }, [trendingLength]);
+  }, [limitedMoviesLength]);
 
   const handlePrevious = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === 0 ? trendingLength - 1 : prevIndex - 1
+      prevIndex === 0 ? limitedMoviesLength - 1 : prevIndex - 1
     );
     pauseAutoSlide();
-  }, [trendingLength]);
+  }, [limitedMoviesLength]);
 
   const pauseAutoSlide = useCallback(() => {
     setIsPaused(true);
@@ -46,20 +48,20 @@ const Hero: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isPaused || !trending) return;
+    if (isPaused || !limitedMovies) return;
 
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [isPaused, handleNext, trending]);
+  }, [isPaused, handleNext, limitedMovies]);
 
-  if (!trending || trending.length === 0) {
+  if (!limitedMovies || limitedMovies.length === 0) {
     return <div>Loading...</div>;
   }
 
-  const movie = trending[currentMovieIndex];
+  const movie = limitedMovies[currentMovieIndex];
 
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
@@ -132,7 +134,7 @@ const Hero: React.FC = () => {
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
         style={{ bottom: '8%' }}
       >
-        {trending.map((_, index) => (
+        {limitedMovies.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentMovieIndex(index)}
