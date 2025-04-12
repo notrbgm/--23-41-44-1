@@ -20,43 +20,45 @@ const Hero: React.FC = () => {
     refetchInterval: 1000 * 60 * 60,
   });
 
-  if (!trending || trending.length === 0) {
-    return <div>Loading...</div>; // Fallback UI instead of null
-  }
-
-  const movie = trending[currentMovieIndex];
+  const trendingLength = trending?.length || 0; // Use a stable local variable
 
   const handleNext = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === trending.length - 1 ? 0 : prevIndex + 1
+      prevIndex === trendingLength - 1 ? 0 : prevIndex + 1
     );
     pauseAutoSlide();
-  }, [trending.length]);
+  }, [trendingLength]);
 
   const handlePrevious = useCallback(() => {
     setCurrentMovieIndex((prevIndex) =>
-      prevIndex === 0 ? trending.length - 1 : prevIndex - 1
+      prevIndex === 0 ? trendingLength - 1 : prevIndex + 1
     );
     pauseAutoSlide();
-  }, [trending.length]);
+  }, [trendingLength]);
 
-  const pauseAutoSlide = () => {
+  const pauseAutoSlide = useCallback(() => {
     setIsPaused(true);
     if (autoSlideTimeout.current) clearTimeout(autoSlideTimeout.current);
     autoSlideTimeout.current = setTimeout(() => {
       setIsPaused(false);
-    }, 8000); // Pause for 8 seconds
-  };
+    }, 8000);
+  }, []);
 
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || !trending) return; // Ensure trending is available
 
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, trending]);
+
+  if (!trending || trending.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const movie = trending[currentMovieIndex];
 
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group">
