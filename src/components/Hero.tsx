@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
       </TransitionGroup>
 
       {/* Movie Details */}
-      <div className="relative h-full flex items-center -translate-y-4">
+      <div className="relative h-full flex items-center -translate-y-[7%]"> // Adjusted positioning
         <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
             {movie.title || movie.name}
