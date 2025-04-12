@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
       </TransitionGroup>
 
       {/* Movie Details */}
-      <div className="relative h-full flex items-center -translate-y-4"> {/* Reverted translate-y */}
+      <div className="relative h-full flex items-center -translate-y-4">
         <div className="px-[4%] w-full md:max-w-[50%] space-y-2 md:space-y-4">
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold animate-fade-in line-clamp-2">
             {movie.title || movie.name}
@@ -129,18 +129,23 @@ const Hero: React.FC = () => {
       {/* Dots Indicator */}
       <div
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
-        style={{ bottom: '8%' }} // Inline style to move dots up by approximately 8%
+        style={{ bottom: '8%' }}
       >
-        {trending.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentMovieIndex(index)}
-            className={`w-[10px] h-[10px] rounded-full ${
-              index === currentMovieIndex ? "bg-white" : "bg-gray-400"
-            } transition duration-300`}
-            aria-label={`Go to movie ${index + 1}`}
-          ></button>
-        ))}
+        {trending
+          .slice(
+            Math.max(0, currentMovieIndex - Math.floor(6 / 2)), // Start slicing dynamically based on current index
+            Math.min(trending.length, currentMovieIndex + Math.ceil(6 / 2)) // End slicing dynamically based on current index
+          )
+          .map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentMovieIndex(index)}
+              className={`w-[10px] h-[10px] rounded-full ${
+                index === currentMovieIndex ? "bg-white" : "bg-gray-400"
+              } transition duration-300`}
+              aria-label={`Go to movie ${index + 1}`}
+            ></button>
+          ))}
       </div>
 
       {/* Movie Details Modal */}
