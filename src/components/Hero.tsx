@@ -6,6 +6,7 @@ import { getTrending } from "@/lib/tmdb";
 import { useState } from "react";
 import MovieDetailsModal from "./MovieDetailsModal";
 import { Image } from "./ui/image";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const Hero = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -39,20 +40,28 @@ const Hero = () => {
 
   return (
     <div className="hero-container relative h-[40vh] sm:h-[50vh] md:h-[48vw] lg:h-[58vw] xl:h-[60vw] w-full mb-2 group"> {/* Adjusted height and bottom margin */}
-      {/* Backdrop Image */}
-      <div className="absolute inset-0">
-        <div className="aspect-video">
-          <Image
-            src={getImageUrl(movie.backdrop_path || "/placeholder.jpg", "original")}
-            alt={movie.title || movie.name}
-            className="w-full h-full object-cover"
-            priority={true}
-          />
-        </div>
-        {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" /> {/* Bottom fade */}
-        <div className="absolute inset-0 hero-gradient" />
-      </div>
+      <TransitionGroup className="absolute inset-0">
+        <CSSTransition
+          key={movie.id}
+          timeout={500}
+          classNames="slide"
+        >
+          <div className="absolute inset-0">
+            <div className="aspect-video">
+              <Image
+                src={getImageUrl(movie.backdrop_path || "/placeholder.jpg", "original")}
+                alt={movie.title || movie.name}
+                className="w-full h-full object-cover"
+                priority={true}
+              />
+            </div>
+            {/* Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" /> {/* Bottom fade */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" /> {/* Top fade */}
+            <div className="absolute inset-0 hero-gradient" />
+          </div>
+        </CSSTransition>
+      </TransitionGroup>
 
       {/* Movie Details */}
       <div className="relative h-full flex items-center -translate-y-4"> {/* Moved content upward */}
