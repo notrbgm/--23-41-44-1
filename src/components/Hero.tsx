@@ -116,7 +116,7 @@ const Hero: React.FC = () => {
       {/* Dots Indicator */}
       <div
         className="absolute left-[50%] transform -translate-x-[50%] flex gap-[8px]"
-        style={{ bottom: '8%' }}
+        style={{ bottom: '12%' }} // Adjusted bottom position to move dots higher
       >
         {limitedMovies.map((_, index) => (
           <button
