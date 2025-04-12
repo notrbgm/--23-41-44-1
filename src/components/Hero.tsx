@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'; // Importing useRef
+import React, { useState, useEffect, useCallback, useRef } from 'react'; // Importing hooks
 import { Play, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "@/lib/tmdb";

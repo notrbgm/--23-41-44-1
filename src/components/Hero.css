@@ -1,5 +1,10 @@
 /* Hero.css */
 
+/* Hero Container */
+.hero-container {
+  overflow: hidden; /* Prevent scrollbar from appearing */
+}
+
 /* Slide Animation */
 .slide-enter {
   transform: translateX(100%);
