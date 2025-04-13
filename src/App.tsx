@@ -11,6 +11,7 @@ import Search from "@/pages/Search";
 import Category from "@/pages/Category";
 import Legal from "@/pages/Legal";
 import MyList from "@/pages/MyList";
+import AccountSettings from "@/pages/AccountSettings"; // Import AccountSettings page
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/:type/:id/watch" element={<Watch />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="/my-list" element={<MyList />} />
+            <Route path="/account-settings" element={<AccountSettings />} /> {/* Account settings route */}
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
