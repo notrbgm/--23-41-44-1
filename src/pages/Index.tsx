@@ -16,10 +16,6 @@ import {
   type MovieResponse,
 } from "@/lib/tmdb";
 
-interface IndexProps {
-  showAuthModal: () => void;
-}
-
 const GENRE_IDS = {
   horror: "27",
   scifi: "878",
@@ -31,8 +27,8 @@ const GENRE_IDS = {
   drama: "18"
 };
 
-const Index = ({ showAuthModal }: IndexProps) => {
-  const { data: popularMovies } = useQuery<Movie[]>({
+const Index = () => {
+  const { data: popularMovies } = useQuery({
     queryKey: ["popular"],
     queryFn: async () => {
       const response = await getPopular();
@@ -40,17 +36,17 @@ const Index = ({ showAuthModal }: IndexProps) => {
     },
   });
 
-  const { data: newReleases } = useQuery<Movie[]>({
+  const { data: newReleases } = useQuery({
     queryKey: ["new-releases"],
     queryFn: getNewReleases,
   });
 
-  const { data: kdramas } = useQuery<Movie[]>({
+  const { data: kdramas } = useQuery({
     queryKey: ["kdramas"],
     queryFn: getKDramas,
   });
 
-  const { data: tvShows } = useQuery<Movie[]>({
+  const { data: tvShows } = useQuery({
     queryKey: ["tvshows"],
     queryFn: async () => {
       const response = await getTVShows();
@@ -58,27 +54,81 @@ const Index = ({ showAuthModal }: IndexProps) => {
     },
   });
 
-  const { data: trending } = useQuery<Movie[]>({
+  const { data: trending } = useQuery({
     queryKey: ["trending"],
     queryFn: getTrending,
   });
 
+  // Genre-specific queries
+  const { data: horrorMovies } = useQuery({
+    queryKey: ["genre", GENRE_IDS.horror],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.horror),
+  });
+
+  const { data: actionMovies } = useQuery({
+    queryKey: ["genre", GENRE_IDS.action],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.action),
+  });
+
+  const { data: scifiMovies } = useQuery({
+    queryKey: ["genre", GENRE_IDS.scifi],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.scifi),
+  });
+
+  const { data: animationMovies } = useQuery({
+    queryKey: ["genre", GENRE_IDS.animation],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.animation),
+  });
+
+  const { data: thrillerMovies } = useQuery({
+    queryKey: ["genre", GENRE_IDS.thriller],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.thriller),
+  });
+
+  const { data: romanceMovies } = useQuery({
+    queryKey: ["genre", GENRE_IDS.romance],
+    queryFn: () => getMoviesByGenre(GENRE_IDS.romance),
+  });
+
   return (
-    <div className="min-h-screen bg-netflix-black">
-      {/* Pass showAuthModal to Navbar */}
-      <Navbar showAuthModal={showAuthModal} />
-      <AnnouncementBanner />
-      <Hero />
-      {/* Other rows */}
-      {trending && trending.length > 0 && (
-        <TopTenRow title="Top 10 Today" movies={trending} />
-      )}
-      {popularMovies && popularMovies.length > 0 && (
-        <CategoryRow title="Popular Movies" movies={popularMovies} />
-      )}
-      {/* Add other rows here */}
-      <Footer />
-    </div>
+    
+      
+        {trending && trending.length > 0 && (
+          
+        )}
+        {popularMovies && popularMovies.length > 0 && (
+          
+        )}
+        {newReleases && newReleases.length > 0 && (
+          
+        )}
+        {kdramas && kdramas.length > 0 && (
+          
+        )}
+        {tvShows && tvShows.length > 0 && (
+          
+        )}
+        {horrorMovies?.results && horrorMovies.results.length > 0 && (
+          
+        )}
+        {actionMovies?.results && actionMovies.results.length > 0 && (
+          
+        )}
+        {scifiMovies?.results && scifiMovies.results.length > 0 && (
+          
+        )}
+        {animationMovies?.results && animationMovies.results.length > 0 && (
+          
+        )}
+        {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
+          
+        )}
+        {romanceMovies?.results && romanceMovies.results.length > 0 && (
+          
+        )}
+      
+      
+    
   );
 };
 
