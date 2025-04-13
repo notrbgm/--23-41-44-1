@@ -173,7 +173,7 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 bg-black/90 text-white border-gray-700">
               <DropdownMenuItem onClick={showMyList} className="cursor-pointer hover:bg-gray-800">My List</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => toast.info("Account settings coming soon!")} className="cursor-pointer hover:bg-gray-800">Account Settings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleNavigation("/account-settings")} className="cursor-pointer hover:bg-gray-800">Account Settings</DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleNavigation("/legal")} className="cursor-pointer hover:bg-gray-800">Legal Disclaimer</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
