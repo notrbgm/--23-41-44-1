@@ -31,6 +31,7 @@ const App = () => {
 
         <BrowserRouter>
           <Routes>
+            {/* Pass setIsAuthModalOpen to Index page */}
             <Route 
               path="/" 
               element={<Index showAuthModal={() => setIsAuthModalOpen(true)} />} 
