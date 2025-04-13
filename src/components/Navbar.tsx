@@ -14,6 +14,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import AuthModal from "@/components/AuthModal";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, logOut } from "@/lib/firebase";
 
 interface Movie {
   id: number;
@@ -29,6 +32,8 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [user] = useAuthState(auth);
 
   const { data: searchResults } = useQuery({
     queryKey: ["search", searchQuery],
@@ -84,6 +89,16 @@ const Navbar = () => {
     navigate("/my-list");
   };
 
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.success("Logged out successfully!");
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-gradient-to-b from-black/80 to-transparent">
       
@@ -97,9 +112,38 @@ const Navbar = () => {
         
         
           
+            <Search className="absolute left-2.5 top-2.5 h-5 w-5 text-gray-500" />
             
           
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <User className="h-6 w-6 cursor-pointer text-white" />
+              </DropdownMenuTrigger>
+              
+                
+                  My List
+                
+                
+                  Account Settings
+                
+                
+                  Legal Disclaimer
+                
+                
+                  Log Out
+                
+              
+            </DropdownMenu>
+          ) : (
+            
+              Sign In
+            
+          )}
         
+      
+
       
         
           
@@ -126,7 +170,11 @@ const Navbar = () => {
 
       
         
+          setSelectedMovie(null)}
+        />
       
+       
+       
     </nav>
   );
 };
