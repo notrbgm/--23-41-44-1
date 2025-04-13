@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase'; // Your Firebase auth instance
+import { firebaseConfig } from './firebase/firebaseConfig';
 import Navbar from '@/components/Navbar';
 import Index from '@/pages/Index';
 import Search from '@/pages/Search';
