@@ -12,8 +12,6 @@ import {
   getKDramas,
   getTVShows,
   getTrending,
-  type Movie,
-  type MovieResponse,
 } from "@/lib/tmdb";
 
 const GENRE_IDS = {
@@ -24,7 +22,7 @@ const GENRE_IDS = {
   romance: "10749",
   action: "28",
   comedy: "35",
-  drama: "18"
+  drama: "18",
 };
 
 const Index = () => {
@@ -59,7 +57,6 @@ const Index = () => {
     queryFn: getTrending,
   });
 
-  // Genre-specific queries
   const { data: horrorMovies } = useQuery({
     queryKey: ["genre", GENRE_IDS.horror],
     queryFn: () => getMoviesByGenre(GENRE_IDS.horror),
@@ -91,46 +88,57 @@ const Index = () => {
   });
 
   return (
-    
-      
+    <>
       <Navbar />
       <AnnouncementBanner />
       <Hero />
-      {trending && trending.length > 0 ? (
-        
-      
-      {popularMovies && popularMovies.length > 0 ? (
-        
-      
-      {newReleases && newReleases.length > 0 ? (
-        
-      
-      {kdramas && kdramas.length > 0 ? (
-        
-      
-      {tvShows && tvShows.length > 0 ? (
-        
-      
-      {horrorMovies?.results && horrorMovies.results.length > 0 ? (
-        
-      
-      {actionMovies?.results && actionMovies.results.length > 0 ? (
-        
-      
-      {scifiMovies?.results && scifiMovies.results.length > 0 ? (
-        
-      
-      {animationMovies?.results && animationMovies.results.length > 0 ? (
-        
-      
-      {thrillerMovies?.results && thrillerMovies.results.length > 0 ? (
-        
-      
-      {romanceMovies?.results && romanceMovies.results.length > 0 ? (
-        
-      
-      
-      
+
+      {trending && trending.length > 0 && (
+        <TopTenRow title="🔥 Trending Now" movies={trending} />
+      )}
+
+      {popularMovies && popularMovies.length > 0 && (
+        <CategoryRow title="Popular Movies" movies={popularMovies} />
+      )}
+
+      {newReleases && newReleases.length > 0 && (
+        <CategoryRow title="🆕 New Releases" movies={newReleases} />
+      )}
+
+      {kdramas && kdramas.length > 0 && (
+        <CategoryRow title="💜 K-Dramas" movies={kdramas} />
+      )}
+
+      {tvShows && tvShows.length > 0 && (
+        <CategoryRow title="📺 TV Shows" movies={tvShows} />
+      )}
+
+      {horrorMovies?.results && horrorMovies.results.length > 0 && (
+        <CategoryRow title="😱 Horror" movies={horrorMovies.results} />
+      )}
+
+      {actionMovies?.results && actionMovies.results.length > 0 && (
+        <CategoryRow title="💥 Action" movies={actionMovies.results} />
+      )}
+
+      {scifiMovies?.results && scifiMovies.results.length > 0 && (
+        <CategoryRow title="🚀 Sci-Fi" movies={scifiMovies.results} />
+      )}
+
+      {animationMovies?.results && animationMovies.results.length > 0 && (
+        <CategoryRow title="🎨 Animation" movies={animationMovies.results} />
+      )}
+
+      {thrillerMovies?.results && thrillerMovies.results.length > 0 && (
+        <CategoryRow title="🔪 Thriller" movies={thrillerMovies.results} />
+      )}
+
+      {romanceMovies?.results && romanceMovies.results.length > 0 && (
+        <CategoryRow title="💘 Romance" movies={romanceMovies.results} />
+      )}
+
+      <Footer />
+    </>
   );
 };
 
