@@ -93,21 +93,44 @@ const Index = () => {
   return (
     
       
+      <Navbar />
+      <AnnouncementBanner />
+      <Hero />
+      {trending && trending.length > 0 ? (
         
+      
+      {popularMovies && popularMovies.length > 0 ? (
         
+      
+      {newReleases && newReleases.length > 0 ? (
         
+      
+      {kdramas && kdramas.length > 0 ? (
         
+      
+      {tvShows && tvShows.length > 0 ? (
         
+      
+      {horrorMovies?.results && horrorMovies.results.length > 0 ? (
         
+      
+      {actionMovies?.results && actionMovies.results.length > 0 ? (
         
+      
+      {scifiMovies?.results && scifiMovies.results.length > 0 ? (
         
+      
+      {animationMovies?.results && animationMovies.results.length > 0 ? (
         
+      
+      {thrillerMovies?.results && thrillerMovies.results.length > 0 ? (
         
-        
+      
+      {romanceMovies?.results && romanceMovies.results.length > 0 ? (
         
       
       
-    
+      
   );
 };
 
