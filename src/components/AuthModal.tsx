@@ -1,6 +1,5 @@
-// AuthModal.tsx
-import React, { useState } from 'react';
-import './AuthModal.css'; // Import the CSS file
+import React, { useState } from "react";
+import "./AuthModal.css";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -8,11 +7,9 @@ interface AuthModalProps {
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const [isLogin, setIsLogin] = useState(true); // true for Login, false for Sign Up
-
-  if (!isOpen) {
-    return null;
-  }
+  const [isLogin, setIsLogin] = useState(true);
+  
+  if (!isOpen) return null;
 
   return (
     <div className="auth-modal-overlay">
@@ -22,89 +19,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </button>
 
         <div className="auth-modal-header">
-          <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
-          <button onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Login'}
+          <h2>{isLogin ? "Sign In" : "Sign Up"}</h2>
+          <button 
+            className="auth-modal-switch"
+            onClick={() => setIsLogin(!isLogin)}
+          >
+            {isLogin ? "New to CinePlay? Sign up now." : "Already have an account? Sign in."}
           </button>
         </div>
 
-        {isLogin ? <LoginForm /> : <SignUpForm />}
+        {/* Form */}
+        <form className="auth-form">
+          {!isLogin && (
+            <input type="text" placeholder="Username" className="auth-input" />
+          )}
+          <input type="email" placeholder="Email" className="auth-input" />
+          <input type="password" placeholder="Password" className="auth-input" />
+          <button type="submit" className="auth-submit">
+            {isLogin ? "Sign In" : "Sign Up"}
+          </button>
+        </form>
       </div>
     </div>
-  );
-};
-
-// Login Form Component
-const LoginForm: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log('Login submitted', { username, password });
-  };
-
-  return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Login</button>
-    </form>
-  );
-};
-
-// Sign Up Form Component
-const SignUpForm: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign up logic here
-    console.log('Sign Up submitted', { username, email, password, confirmPassword });
-  };
-
-  return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
-      <button type="submit">Sign Up</button>
-    </form>
   );
 };
 
