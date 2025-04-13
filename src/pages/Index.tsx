@@ -16,7 +16,6 @@ import {
   type MovieResponse,
 } from "@/lib/tmdb";
 
-// Add props interface
 interface IndexProps {
   showAuthModal: () => void;
 }
@@ -32,8 +31,37 @@ const GENRE_IDS = {
   drama: "18"
 };
 
-const Index = ({ showAuthModal }: IndexProps) => {  // Add props
-  // ... existing query definitions ...
+const Index = ({ showAuthModal }: IndexProps) => {
+  const { data: popularMovies } = useQuery<Movie[]>({
+    queryKey: ["popular"],
+    queryFn: async () => {
+      const response = await getPopular();
+      return response.results;
+    },
+  });
+
+  const { data: newReleases } = useQuery<Movie[]>({
+    queryKey: ["new-releases"],
+    queryFn: getNewReleases,
+  });
+
+  const { data: kdramas } = useQuery<Movie[]>({
+    queryKey: ["kdramas"],
+    queryFn: getKDramas,
+  });
+
+  const { data: tvShows } = useQuery<Movie[]>({
+    queryKey: ["tvshows"],
+    queryFn: async () => {
+      const response = await getTVShows();
+      return response.results;
+    },
+  });
+
+  const { data: trending } = useQuery<Movie[]>({
+    queryKey: ["trending"],
+    queryFn: getTrending,
+  });
 
   return (
     <div className="min-h-screen bg-netflix-black">
@@ -41,7 +69,15 @@ const Index = ({ showAuthModal }: IndexProps) => {  // Add props
       <Navbar showAuthModal={showAuthModal} />
       <AnnouncementBanner />
       <Hero />
-      {/* ... rest of the existing content ... */}
+      {/* Other rows */}
+      {trending && trending.length > 0 && (
+        <TopTenRow title="Top 10 Today" movies={trending} />
+      )}
+      {popularMovies && popularMovies.length > 0 && (
+        <CategoryRow title="Popular Movies" movies={popularMovies} />
+      )}
+      {/* Add other rows here */}
+      <Footer />
     </div>
   );
 };
