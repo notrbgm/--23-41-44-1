@@ -69,7 +69,8 @@
     "vaul": "^0.9.3",
     "zod": "^3.23.8",
     "firebase": "^11.6.0",
-    "@headlessui/react": "^2.2.1"
+    "@headlessui/react": "^2.2.1",
+    "react-firebase-hooks": "^5.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
